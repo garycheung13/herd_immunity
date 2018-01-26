@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css?family=Muli:600,700|Open+Sans:300,600" rel="stylesheet">
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <title>Herd Immunity Visualization</title>
@@ -27,7 +27,7 @@
                 against certain diseases such as those who are too young, too old, or allergic to the vaccination. These
                 people must rely on those around to get vaccinated so that the diease has lower odds of spreading to them.
             </p>
-            <img class="diagram" src="diagram.png" alt="image illustrating spread of a virus">
+            <img class="diagram" src="images/diagram.png" alt="image illustrating spread of a virus">
             <p class="caption">The diagram above shows the difference between how a disease might spread in a population where no one is protected
                 against the disease versus where the population where some people are vaccinated. Notice that some of the
                 people who are not vaccinated remain uninfected because immune neighbors impeded the spread of the disease.</p>
@@ -211,7 +211,7 @@
                     <text x="250" y="50" font-family="Open Sans" text-anchor="middle" font-size="20">
                         Press Simulate to Begin Outbreak
                     </text>
-                    <image href="placeholder.png" x=50 y="75"></image>
+                    <image href="images/placeholder.png" x=50 y="75"></image>
                 </svg>
             </div>
             <div class="flex-item">
@@ -256,10 +256,9 @@
             </p>
         </div>
     </div>
-    <script src="probability.js"></script>
-    <script src="main.js"></script>
-    <script src="donut.js"></script>
-    <script src="lineChart.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/probability.js"></script>
+    <script src="js/donut.js"></script>
+    <script src="js/lineChart.js"></script>
 </body>
-
 </html>

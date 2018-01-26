@@ -18,7 +18,6 @@ const dataStore = (function () {
     let distanceData = [];
     let livePoplationStats = {};
 
-    // const displayElement = document.getElementById("infected-counter");
     const resultsElement = document.getElementById("final-stats-body");
 
     function calculateInfectPercent() {
@@ -66,12 +65,10 @@ const dataStore = (function () {
         },
 
         incrementDisplayElement: function () {
-            // displayElement.innerHTML = +displayElement.innerHTML + 1;
             infectedTotal++;
         },
 
         resetDisplayElement: function () {
-            // displayElement.innerHTML = 0;
             infectedTotal = 0;
         },
 
