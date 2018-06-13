@@ -10,17 +10,6 @@ var sourcemaps = require('gulp-sourcemaps');
 var bs = require("browser-sync").create();
 var babelify = require('babelify');
 
-gulp.task('serve', ['scss'], function () {
-
-    bs.init({
-        server: "."
-    });
-
-    gulp.watch("scss/*/**", ['scss']);
-    gulp.watch(["css/main.css", "index.html"]).on('change', bs.reload);
-});
-
-
 gulp.task("scss", function () {
     gulp.src("scss/main.scss")
         .pipe(sass({
@@ -31,13 +20,13 @@ gulp.task("scss", function () {
             browsers: ["last 20 versions"]
         }))
         .pipe(rename("main.min.css"))
-        .pipe(gulp.dest("css/"));
+        .pipe(gulp.dest("css/"))
+        .pipe(bs.stream())
 });
 
-
-gulp.task("js", function () {
+gulp.task("bundle", function () {
     browserify({
-            entries: "js/main.js",
+            entries: "src/js/main.js",
             debug: true
         }).transform("babelify", { presets: ["@babel/preset-es2015"]})
         .bundle()
@@ -48,5 +37,17 @@ gulp.task("js", function () {
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("js/"))
 });
+
+gulp.task('serve', ['scss'], function () {
+
+    bs.init({
+        server: "./"
+    });
+
+    gulp.watch("scss/*/**", ['scss']);
+    gulp.watch("src/js/*.js", ['bundle'])
+    gulp.watch(["index.html", "js/main.min.js"]).on("change", bs.reload);
+});
+
 
 gulp.task("default", ["serve"]);
