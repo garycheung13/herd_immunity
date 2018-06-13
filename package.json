@@ -1,0 +1,16 @@
+{
+  "name": "herd_immunity_viz",
+  "version": "1.0.0",
+  "description": "Interactive visualization about herd immunity",
+  "main": "index.html",
+  "repository": "https://github.com/garycheung13/herd_immunity.git",
+  "author": "Gary Cheung",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^2.24.4",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-rename": "^1.2.3",
+    "gulp-sass": "^4.0.1"
+  }
+}
