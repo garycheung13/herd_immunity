@@ -1,10 +1,3 @@
-import { hello } from './smoketest';
+import { select } from 'd3-selection';
 
-hello();
-hello();
-console.log("hello");
-console.log("helloasdadsadsaddsa");
-console.log("testing 2 a");
-
-
-
+select("#chart").text("hello world tester world");

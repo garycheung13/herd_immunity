@@ -11,42 +11,41 @@ var bs = require("browser-sync").create();
 var babelify = require('babelify');
 
 gulp.task("scss", function () {
-    gulp.src("scss/main.scss")
+    gulp.src("src/scss/main.scss")
         .pipe(sass({
             outputStyle: "compressed",
-            errLogToConsole: true,
         }))
         .pipe(autoprefixer({
             browsers: ["last 20 versions"]
         }))
         .pipe(rename("main.min.css"))
-        .pipe(gulp.dest("css/"))
-        .pipe(bs.stream())
+        .pipe(gulp.dest("dist/css/"))
+        .pipe(bs.stream());
 });
 
 gulp.task("bundle", function () {
     browserify({
             entries: "src/js/main.js",
             debug: true
-        }).transform("babelify", { presets: ["@babel/preset-es2015"]})
+        }).transform(babelify, { presets: ["@babel/preset-es2015"]})
         .bundle()
         .pipe(source("main.min.js"))
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
-            .pipe(uglify())
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest("js/"))
+        .pipe(uglify())
+        .pipe(sourcemaps.write("./"))
+        .pipe(gulp.dest("dist/js/"))
 });
 
-gulp.task('serve', ['scss'], function () {
+gulp.task('serve', ['scss', 'bundle'], function () {
 
     bs.init({
         server: "./"
     });
 
-    gulp.watch("scss/*/**", ['scss']);
+    gulp.watch("src/scss/**/*", ['scss']);
     gulp.watch("src/js/*.js", ['bundle'])
-    gulp.watch(["index.html", "js/main.min.js"]).on("change", bs.reload);
+    gulp.watch(["index.html", "dist/js/main.min.js"]).on("change", bs.reload);
 });
 
 
