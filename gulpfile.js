@@ -14,12 +14,13 @@ gulp.task("scss", function () {
     gulp.src("src/scss/main.scss")
         .pipe(sass({
             outputStyle: "compressed",
+            includePaths: ["node_modules/normalize-scss/sass"]
         }))
         .pipe(autoprefixer({
             browsers: ["last 20 versions"]
         }))
         .pipe(rename("main.min.css"))
-        .pipe(gulp.dest("dist/css/"))
+        .pipe(gulp.dest("dist"))
         .pipe(bs.stream());
 });
 
@@ -34,7 +35,7 @@ gulp.task("bundle", function () {
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(uglify())
         .pipe(sourcemaps.write("./"))
-        .pipe(gulp.dest("dist/js/"))
+        .pipe(gulp.dest("dist"))
 });
 
 gulp.task('serve', ['scss', 'bundle'], function () {
@@ -45,7 +46,7 @@ gulp.task('serve', ['scss', 'bundle'], function () {
 
     gulp.watch("src/scss/**/*", ['scss']);
     gulp.watch("src/js/*.js", ['bundle'])
-    gulp.watch(["index.html", "dist/js/main.min.js"]).on("change", bs.reload);
+    gulp.watch(["index.html", "dist/main.min.js"]).on("change", bs.reload);
 });
 
 

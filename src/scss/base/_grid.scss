@@ -1,0 +1,52 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.col-lg-4 {
+    flex-basis: 33.33%;
+}
+
+.col-lg-6 {
+    flex-basis: 50%;
+}
+
+.col-lg-8 {
+    flex-basis: 66.67%;
+}
+
+.col-lg-12 {
+    flex-basis: 100%;
+}
+
+.space-btwn {
+    justify-content: space-between;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.reverse {
+    flex-wrap: wrap-reverse;
+}
+
+@include breakpoint-max(medium) {
+    .col-md-12 {
+        flex-basis: 100%;
+    }
+}
+
+@include breakpoint-max (small) {
+    .col-sm-6 {
+        flex-basis: 50%;
+    }
+    .col-sm-12 {
+        flex-basis: 100%;
+    }
+}

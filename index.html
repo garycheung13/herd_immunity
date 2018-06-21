@@ -1,14 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="dist/css/main.min.css">
-    <title>Herd Immunity</title>
+    <link href="https://fonts.googleapis.com/css?family=Lora|Nunito:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="dist/main.min.css">
+    <title>Herd Immunity Explorable</title>
 </head>
+
 <body>
+    <header>
+        <a href="https://ceegary.com">Return to portfolio</a>
+        <h1>Herd Immunity Explorable</h1>
+    </header>
+    <section>
+        <h2>What is Herd Immunity?</h2>
+        <p>
+            Herd immunity is refers to the concept the group protection from an infectious disease that emerges when critical mass of
+            the population are immunized from that recieving the disease. In the majority of cases, immunization stems from
+            recieving vaccination against the disease. These immunized people in the community reduce the odds that a disease
+            can spread from person to person. In other words, persons that are not immune to disease can still be shielded
+            against contracting it by virtue of others in the population being unable to pass it on. The greater number of
+            people immune to a disease, the less likely of a chance that someone vulnerable to the disease will contract
+            it. Herd immunity is important because there people who cannot be vaccinated against certain diseases such as
+            those who are too young, too old, or allergic to the vaccination. These people must rely on those around to get
+            vaccinated so that the diease has lower odds of spreading to them.
+        </p>
+    </section>
+    <section>
+        <h2>Calculating Herd Immunity</h2>
+        <p>
+            A population is deemed to have achieved herd immunity against an infectious disease outbreak when they have reached or surpassed
+            the herd immunity threshold, denoted as Qc. To calculate the value of Q c, one would need to know the basic reproductive
+            rate of the specific disease, denoted as R 0. R0 is a numeric measure representing the average number of infections
+            made by that specific disease based on it's various attibutes such as method of spread and duration if infection.
+            The higher that number is, the more infectious the disease is said to be. Using the entire equation, we can determine
+            the herd immunity threshold calculated by solving for the equation Qc = 1 – (1/R0). For example, mumps can have
+            a R0 of 7, so we can subsitute it in giving us 1 - (1/7) = 0.86, which, when converted int o percentage, yields
+            a herd immunity threshold of approximately 86%. One additional step required to determine the vaccination rate
+            needed for the population. This equation makes the assumption that vaccination against the disease would be 100
+            percent effective. In reality, vaccines are not perfectly effective. Therefore to calculate the vaccination rate
+            needed for herd immunity, we also need to divide Qc by the effectiveness of the vaccine denoted as (E). Thus
+            the percentage of the population required need to vaccinated to reach the herd immunity threshold can be approximated
+            asVc = Qc/E. Going with the previous mumps example, two doses of the mumps vaccine result a effectiveness of
+            88%. When converted to a decimal, we can get the equation 0.86/0.88 = 0.97, which converts to 97%. So 97% of
+            the population is actually needed to achieve herd immunity against mumps! When the vaccination coverage of a
+            population has the necessary percentage for herd immunity, the disease is thought off as "contained".
+        </p>
+        <div class="table-wrapper">
+            <h3>Reproductive Numbers For Well Known Diseases</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Disease Name</th>
+                        <th>Reproductive Number &#40;R<sub>0</sub>&#41;</th>
+                        <th>Vaccine Effectiveness &#40;<i>E</i>&#41;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Measles</td>
+                        <td>12-18</td>
+                        <td>93% &#40;One Dose&#41;, 97% &#40;Two Doses&#41;</td>
+                    </tr>
+                    <tr>
+                        <td>Mumps</td>
+                        <td>4-7</td>
+                        <td>78% &#40;Two Doses&#41;, 88% &#40;Three Doses&#41;</td>
+                    </tr>
+                    <tr>
+                        <td>Polio</td>
+                        <td>5-7</td>
+                        <td>90% &#40;Two Doses&#41;, 99% &#40;Three Doses&#41;</td>
+                    </tr>
+                    <tr>
+                        <td>Rubella</td>
+                        <td>5-7</td>
+                        <td>97%</td>
+                    </tr>
+                    <tr>
+                        <td>Seasonal Flu</td>
+                        <td>1-2</td>
+                        <td>Varys, but typically between 40% - 60%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section>
+        <h2>Your Turn</h2>
+        <p>
+            Watch the effect of vaccination and herd immunity in action by simulating your own outbreak. In the simulation you will be
+            able to modify the reproductive rate of your disease, the effectiveness of the vaccination against it and
+            the vaccination rate of the population. In the simulation, your fictitious disease will have ten attempts
+            infect someone in a population of 250 people. Each time the disease infects a person, it will spread twice
+            according to the reproductive rate you set – once to the R0 number of closest neighbors from the initial
+            infection, and then again for each of the neighbors infected. To incorporate some real life randomness, the
+            location distribution of the vaccinated, unvaccinated and vaccinated but vulnerable is randomly distributed. This will cause some variation the
+            simulation, but you view see the average results on the line graph.
+        </p>
+    </section>
     <div id="chart"></div>
-    <script src="dist/js/main.min.js"></script>
+    <script src="dist/main.min.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,24 @@
+@mixin breakpoint-max($breakpoint) {
+    @if map-has-key($breakpoints, $breakpoint) {
+        @media screen and (max-width: #{map-get($breakpoints, $breakpoint)}) {
+            @content;
+        }
+    }
+
+    @else {
+        @warn "Unknown breakpoint argument: #{$breakpoint}";
+    }
+}
+
+
+@mixin breakpoint-min($at_least) {
+    @if map-has-key($at_least_points, $at_least) {
+        @media screen and (min-width: #{map-get($at_least_points, $at_least)}) {
+            @content;
+        }
+    }
+
+    @else {
+        @warn "Unknown min point argument: #{$at_least}";
+    }
+}
