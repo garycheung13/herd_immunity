@@ -33,20 +33,28 @@
         <h2>Calculating Herd Immunity</h2>
         <p>
             A population is deemed to have achieved herd immunity against an infectious disease outbreak when they have reached or surpassed
-            the herd immunity threshold, denoted as Qc. To calculate the value of Q c, one would need to know the basic reproductive
-            rate of the specific disease, denoted as R 0. R0 is a numeric measure representing the average number of infections
+            the herd immunity threshold, denoted as Q<sub>c</sub>. To calculate the value of Q<sub>c</sub>, one would need to know the basic reproductive
+            rate of the specific disease, denoted as R<sub>0</sub>. R<sub>0</sub> is a numeric measure representing the average number of infections
             made by that specific disease based on it's various attibutes such as method of spread and duration if infection.
             The higher that number is, the more infectious the disease is said to be. Using the entire equation, we can determine
-            the herd immunity threshold calculated by solving for the equation Qc = 1 – (1/R0). For example, mumps can have
-            a R0 of 7, so we can subsitute it in giving us 1 - (1/7) = 0.86, which, when converted int o percentage, yields
-            a herd immunity threshold of approximately 86%. One additional step required to determine the vaccination rate
-            needed for the population. This equation makes the assumption that vaccination against the disease would be 100
-            percent effective. In reality, vaccines are not perfectly effective. Therefore to calculate the vaccination rate
-            needed for herd immunity, we also need to divide Qc by the effectiveness of the vaccine denoted as (E). Thus
-            the percentage of the population required need to vaccinated to reach the herd immunity threshold can be approximated
-            asVc = Qc/E. Going with the previous mumps example, two doses of the mumps vaccine result a effectiveness of
-            88%. When converted to a decimal, we can get the equation 0.86/0.88 = 0.97, which converts to 97%. So 97% of
-            the population is actually needed to achieve herd immunity against mumps! When the vaccination coverage of a
+            the herd immunity threshold calculated by solving for the equation <span class="equation">Q<sub>c</sub> = 1 – &#40;1/R<sub>0</sub>&#41;</span>.</p>
+
+        <p>
+            For example, mumps can have a reproductive number &#40;R<sub>0</sub>&#41; of 7, so when we plug it into the equation,
+            it becomes <span class="equation"> Q<sub>c</sub> = 1 - &#40;1/7&#41;</span>. Solving the equation gives us 0.86. In other words,
+            86% of the population needs to be immunized.
+        </p>
+        <p>
+            However, this calculation makes the assumption that a vaccine against the disease will be 100
+            percent effective. In reality, vaccines are not perfect. Therefore to find the real world vaccination rate
+            required for herd immunity, we also need to factor in imperfect vaccines by dividing Q<sub>c</sub> by the effectiveness of the vaccine&#40;<i>E</i>&#41;.
+            Thus, the population required to reach herd immunity threshold can be approximated
+            as <span class="equation">V<sub>c</sub> = Q<sub>c</sub>/<i>E</i></span>.
+        </p>
+        <p>
+            In our previous mumps example, the effectiveness of getting two doses of the mumps vaccine is 88 percent.
+            When that number is converted to a decimal, we can get the equation <span class="equation">0.86/0.88 = 0.97</span>, which converts into 97%.
+            In reality, 97% of the population is actually needed to reach herd immunity against mumps! When the vaccination coverage of a
             population has the necessary percentage for herd immunity, the disease is thought off as "contained".
         </p>
         <div class="table-wrapper">
@@ -87,6 +95,24 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="citation-wrapper">
+                <p>
+                    History and epidemiology of global smallpox eradication. (2014, August 25).
+                    <cite>Retrieved from https://stacks.cdc.gov/view/cdc/27929</cite>
+                </p>
+                <p>
+                    Vaccine Effectiveness - How Well Does the Flu Vaccine Work? (n.d.).
+                    <cite>Retrieved from https://www.cdc.gov/flu/about/qa/vaccineeffect.htm</cite>
+                </p>
+                <p>
+                    Measles, Mumps, and Rubella (MMR) Vaccination: What Everyone Should Know. (n.d.)
+                    <cite>Retrieved from https://www.cdc.gov/vaccines/vpd/mmr/public/index.html</cite>
+                </p>
+                <p>
+                    Polio Vaccine Effectiveness and Duration of Protection (n.d.)
+                    <cite>https://www.cdc.gov/vaccines/vpd/polio/hcp/effectiveness-duration-protection.html</cite>
+                </p>
+            </div>
         </div>
     </section>
     <section>
@@ -96,11 +122,36 @@
             able to modify the reproductive rate of your disease, the effectiveness of the vaccination against it and
             the vaccination rate of the population. In the simulation, your fictitious disease will have ten attempts
             infect someone in a population of 250 people. Each time the disease infects a person, it will spread twice
-            according to the reproductive rate you set – once to the R0 number of closest neighbors from the initial
+            according to the reproductive rate you set – once to the R<sub>0</sub> number of closest neighbors from the initial
             infection, and then again for each of the neighbors infected. To incorporate some real life randomness, the
             location distribution of the vaccinated, unvaccinated and vaccinated but vulnerable is randomly distributed. This will cause some variation the
             simulation, but you view see the average results on the line graph.
         </p>
+        <div>
+            <form id="sim-settings" action="/">
+                <label class="form-label" for="r-number">
+                    Reproductive Rate &#40;R<sub>0</sub>&#41;<br>
+                    <span class="subtitle">Set how aggressively the disease will spread.</span>
+                </label>
+                <input type="range" name="r-number" value="10" id="r-number" min="1" max="20">
+                <span class="form-display" id="r-number__display">10</span>
+
+                <label for="vac-effect" class="form-label">
+                    Vaccine Effectiveness <br>
+                    <span class="subtitle">Set the effectiveness of the vaccine</span>
+                </label>
+                <input name="vac-effect" type="range" value="50" id="vac-effect" min="1" max="100">
+                <span class="form-display" id="vac-effect__display">50</span>
+
+                <label for="percent-vac" class="form-label">
+                    Percent Vaccinated <br>
+                    <span class="subtitle">How many people will be vaccinated?</span>
+                </label>
+                <input name="percent-vac" type="range" value="50" id="percent-vac" min="1" max="100">
+                <span class="form-display" id="percent-vac__display">50</span>
+            </form>
+            <button>Start Sim</button>
+        </div>
     </section>
     <div id="chart"></div>
     <script src="dist/main.min.js"></script>

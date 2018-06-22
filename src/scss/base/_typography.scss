@@ -44,6 +44,10 @@ p {
   font-size: 1rem;
 }
 
+.equation {
+  font-weight: 600;
+}
+
 table {
   font-family: "Nunito", sans-serif;
   font-weight: 400;
@@ -58,4 +62,17 @@ th {
 
 td {
   font-size: 0.75rem;
+}
+
+.form-label {
+  font-family: "Nunito", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.form-label .subtitle {
+  font-family: "Nunito", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 0.8rem;
 }
