@@ -1,6 +1,7 @@
 import { axisBottom, axisLeft } from 'd3-axis';
 import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
+import { transition } from 'd3-transition';
 import { max } from 'd3-array';
 import { line } from 'd3-shape';
 
@@ -15,6 +16,8 @@ function lineGraph(){
     let yValue = function(d) { return d[1]; };
     let xAxis = axisBottom(xScale);
     let yAxis = axisLeft(yScale);
+    let markerValue = function() { return 0; };
+    let showMarker = false;
 
     function chart(selection){
         selection.each(function(data){
@@ -32,13 +35,23 @@ function lineGraph(){
                 .domain([0, max(data, function(d){return d[1]})])
                 .range([height - margin.top - margin.bottom, 0]);
 
-
             // Select the svg element, if it exists.
             const svg = select(this).selectAll("svg").data([data]);
 
             // Otherwise, create the skeletal chart.
             const svgEnter = svg.enter().append("svg");
+            const gEnter = svgEnter.append("g");
+            // axises
+            gEnter.append("g")
+                .attr("class", "x-axis axis")
+                .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
+                .call(xAxis)
 
+            gEnter.append("g")
+                .attr("class", "y-axis axis")
+                .call(yAxis);
+
+            gEnter.append("path").attr("class", "plot")
             // position and size the svg container
             // Using viewbox to make chart responsive
             // must assign at least one size attribute or else most browsers
@@ -49,32 +62,34 @@ function lineGraph(){
                 .style("max-width", `${width}px`);
 
             // positioning chart area
-            const chartArea = svg.merge(svgEnter).append("g")
+            const chartArea = svg.merge(svgEnter).select("g")
                 .attr("transform", `translate(${margin.left},${margin.top})`)
-
-            // axises
-            chartArea.append("g")
-                .attr("class", "x-axis axis")
-                .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
-                .call(xAxis)
-
-            chartArea.append("g")
-                .attr("class", "y-axis axis")
-                .call(yAxis);
 
             const valueLine = line()
                 .x(function(d) {return xScale(d[0])})
                 .y(function(d) {return yScale(d[1])});
 
-            chartArea.append("path")
-                .datum(data)
+            chartArea.select(".plot")
                 .attr("fill", "none")
                 .attr("stroke", "steelblue")
                 .attr("stroke-linejoin", "round")
                 .attr("stroke-linecap", "round")
                 .attr("stroke-width", 1.5)
-                .attr("d", valueLine)
-                .attr("class", "path");
+                .transition()
+                .attr("d", valueLine);
+
+            if (showMarker) {
+                const value = (typeof markerValue === "function") ? markerValue.call(null, data) : markerValue;
+                chartArea.append("line")
+                .attr("x1", xScale(value))
+                .attr("y1", 0)
+                .attr("x2", xScale(value))
+                .attr("y2", height - margin.top - margin.bottom)
+                .attr("class", "immune-line")
+                .attr("stroke-dasharray", "5, 5")
+                .style("stroke-width", 1)
+                .style("stroke", "grey");
+            }
         })
     }
 
@@ -108,6 +123,18 @@ function lineGraph(){
         yValue = value;
         return chart;
     };
+
+    chart.showMarker = function(value) {
+        if (!arguments.length) return showMarker;
+        showMarker = value;
+        return chart;
+    }
+
+    chart.markerValue = function(value) {
+        if (!arguments.length) return markerValue;
+        markerValue = value;
+        return chart;
+    }
 
     return chart;
 }
