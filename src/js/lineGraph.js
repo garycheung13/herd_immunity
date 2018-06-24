@@ -27,6 +27,7 @@ function lineGraph(){
                 return [xValue.call(data, d, i), yValue.call(data, d, i)]
             });
 
+            // calculate scales and line direction before render
             xScale
                 .domain([0, max(data, function(d){return d[0]})])
                 .range([0, width - margin.left - margin.right]);
@@ -35,23 +36,18 @@ function lineGraph(){
                 .domain([0, max(data, function(d){return d[1]})])
                 .range([height - margin.top - margin.bottom, 0]);
 
+            const valueLine = line()
+                .x(function(d) {return xScale(d[0])})
+                .y(function(d) {return yScale(d[1])});
+
+            // start render
             // Select the svg element, if it exists.
             const svg = select(this).selectAll("svg").data([data]);
 
             // Otherwise, create the skeletal chart.
             const svgEnter = svg.enter().append("svg");
-            const gEnter = svgEnter.append("g");
-            // axises
-            gEnter.append("g")
-                .attr("class", "x-axis axis")
-                .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
-                .call(xAxis)
+            const gEnter = svgEnter.append("g"); // location of line
 
-            gEnter.append("g")
-                .attr("class", "y-axis axis")
-                .call(yAxis);
-
-            gEnter.append("path").attr("class", "plot")
             // position and size the svg container
             // Using viewbox to make chart responsive
             // must assign at least one size attribute or else most browsers
@@ -65,10 +61,19 @@ function lineGraph(){
             const chartArea = svg.merge(svgEnter).select("g")
                 .attr("transform", `translate(${margin.left},${margin.top})`)
 
-            const valueLine = line()
-                .x(function(d) {return xScale(d[0])})
-                .y(function(d) {return yScale(d[1])});
+            // create and draw axes
+            gEnter.append("g")
+                .attr("class", "x-axis axis")
+                .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
+                .call(xAxis)
 
+            gEnter.append("g")
+                .attr("class", "y-axis axis")
+                .call(yAxis);
+
+            gEnter.append("path").attr("class", "plot")
+
+            // finally drawing the line on the graph
             chartArea.select(".plot")
                 .attr("fill", "none")
                 .attr("stroke", "steelblue")
@@ -78,17 +83,20 @@ function lineGraph(){
                 .transition()
                 .attr("d", valueLine);
 
+            // handle drawing a vertical line marker on the graph if needed
             if (showMarker) {
                 const value = (typeof markerValue === "function") ? markerValue.call(null, data) : markerValue;
-                chartArea.append("line")
-                .attr("x1", xScale(value))
-                .attr("y1", 0)
-                .attr("x2", xScale(value))
-                .attr("y2", height - margin.top - margin.bottom)
-                .attr("class", "immune-line")
-                .attr("stroke-dasharray", "5, 5")
-                .style("stroke-width", 1)
-                .style("stroke", "grey");
+                gEnter.append("line").attr("class", "threshold-marker")
+                chartArea.select(".threshold-marker")
+                    .attr("stroke-dasharray", "5, 5")
+                    .style("stroke-width", 1)
+                    .style("stroke", "grey")
+                    .transition()
+                    .attr("x1", xScale(value))
+                    .attr("x2", xScale(value))
+                    .attr("y1", 0)
+                    .attr("y2", height - margin.top - margin.bottom);
+
             }
         })
     }

@@ -1,83 +1,37 @@
 import lineGraph from './lineGraph';
+import donutChart from './donutChart';
 import { select } from 'd3-selection';
 import "./inputEvents";
 
-let defaultData = [{
-    "percentInterval": 0,
-    "probability": 1
-}, {
-    "percentInterval": 10,
-    "probability": .9519999999999982
-}, {
-    "percentInterval": 20,
-    "probability": 0.8999490754938368
-}, {
-    "percentInterval": 30,
-    "probability": 0.8507346589600671
-}, {
-    "percentInterval": 40,
-    "probability": 0.7931216448601929
-}, {
-    "percentInterval": 50,
-    "probability": 0.7359907109503546
-}, {
-    "percentInterval": 60,
-    "probability": 0.6643794408056614
-}, {
-    "percentInterval": 70,
-    "probability": 0.6042326024262262
-}, {
-    "percentInterval": 80,
-    "probability": 0.5233382743563393
-}, {
-    "percentInterval": 90,
-    "probability": 0.46694997600028654
-}, {
-    "percentInterval": 100,
-    "probability": 0.3729724400108452
-}];
+const fakeData = [{
+    label: "Vaccinated and immune",
+    size: 250
+  }, {
+    label: "Vaccinated but vulnerable",
+    size: 0
+  }, {
+    label: "Not vaccinated",
+    size: 0
+  }, {
+    label: "Infected",
+    size: 0
+  }]
 
-let testUpdate = [{
-    "percentInterval": 0,
-    "probability": 1
-}, {
-    "percentInterval": 10,
-    "probability": .9519999999999982
-}, {
-    "percentInterval": 20,
-    "probability": 0.8999490754938368
-}, {
-    "percentInterval": 30,
-    "probability": 0.8507346589600671
-}, {
-    "percentInterval": 40,
-    "probability": 0.7931216448601929
-}, {
-    "percentInterval": 50,
-    "probability": 0.7359907109503546
-}, {
-    "percentInterval": 60,
-    "probability": 0.31643794408056614
-}, {
-    "percentInterval": 70,
-    "probability": 0.4042326024262262
-}, {
-    "percentInterval": 80,
-    "probability": 0.5233382743563393
-}, {
-    "percentInterval": 90,
-    "probability": 0.26694997600028654
-}, {
-    "percentInterval": 100,
-    "probability": 0.1729724400108452
-}];
-const chart = lineGraph()
-    .x(function(d){return +d.percentInterval})
-    .y(function(d){return +d.probability})
-    .showMarker(true).markerValue(40);
-
-select('#chart').datum(defaultData).call(chart);
+const donut = donutChart();
+select('#chart').datum(fakeData).call(donut);
 
 document.getElementById("test-update-button").addEventListener("click", function(){
-    select('#chart').datum(testUpdate).call(chart);
+    select('#chart').datum([{
+        label: "Vaccinated and immune",
+        size: Math.random() * 100
+      }, {
+        label: "Vaccinated but vulnerable",
+        size: Math.random() * 100
+      }, {
+        label: "Not vaccinated",
+        size: Math.random() * 100
+      }, {
+        label: "Infected",
+        size: Math.random() * 100
+      }]).call(donut);
 })
