@@ -1,10 +1,22 @@
-#container {
-    padding-left: 15%;
-    padding-right: 15%;
+body {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 959px){
+    body {
+        margin-left: 25px;
+        margin-right: 25px;
+    }
+
+    p{
+        font-size: 14px;
+    }
 }
 
 .block {
     padding-bottom: 7.5%;
+
 }
 
 .diagram {
@@ -15,6 +27,10 @@
 .caption {
     font-style: italic;
     font-family: "Open Sans", sans-serif;
+}
+
+.equation {
+    font-weight: 600;
 }
 
 h1 {
@@ -35,12 +51,14 @@ label,
 span {
     font-family: "Open-Sans", sans-serif;
     font-weight: 300;
-    font-style: 1em;
+    font-style: normal;
     line-height: 165%;
 }
 
 table {
+    width: 100%;
     margin: auto;
+    border-collapse: collapse;
 }
 
 table,
@@ -54,6 +72,7 @@ td {
 th,
 td {
     padding: 10px;
+    text-align: left;
 }
 
 .form-block {
@@ -83,8 +102,13 @@ td {
 }
 
 #final-stats {
-    margin-top: 5%;
-    display: inline-block;
+    width: 100%;
+}
+
+@media screen and (max-width: 767px) {
+    #final-stats, table, th, td {
+        font-size: 12px;
+    }
 }
 
 .formulas h4 {
@@ -101,13 +125,19 @@ td {
 .flex-container {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
-    margin: 0 auto;
 }
 
 .flex-item {
     width: 50%;
+}
+
+@media screen and (max-width: 991px) {
+    .flex-item {
+        width: 100%;
+    }
 }
 
 .form-label {
@@ -121,8 +151,8 @@ td {
 
 .citation {
     font-size: 12px;
-    padding-left: 5%;
-    padding-right: 5%;
+    /* padding-left: 5%;
+    padding-right: 5%; */
 }
 
 .arc-size {

@@ -45,8 +45,11 @@ const lineChart = (function () {
     let height = 500 - margins.top - margins.bottom;
 
     let svg = d3.select("#probability-graph").append("svg")
-        .attr("width", width + margins.left + margins.right)
-        .attr("height", height + margins.top + margins.bottom)
+        // .attr("width", width + margins.left + margins.right)
+        // .attr("height", height + margins.top + margins.bottom)
+        .attr("viewBox", "0,0," + (width + margins.left + margins.right) + "," + (height + margins.top + margins.bottom))
+        .attr("perserveAspectRatio", "xMinYmid meet")
+        .style("max-width", width + margins.left + margins.right + "px")
         .append("g")
         .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
 

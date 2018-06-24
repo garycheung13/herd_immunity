@@ -309,8 +309,9 @@ function start(config) {
 
 
     var svg = d3.select("#graph")
-        .attr("width", width)
-        .attr("height", height);
+        .attr("viewBox", "0,0," + width + "," + height)
+        .attr("perserveAspectRatio", "xMinYmid meet")
+        .style("max-width", width + "px")
     //area resets
     //clear the svg area of text and image
     svg.selectAll("text").remove();
