@@ -7,7 +7,6 @@ import { interpolate } from 'd3-interpolate';
 function donutChart() {
     let height = 500;
     let width = 500;
-    let margin = {top: 40, right: 40, bottom: 40, left: 40};
     let colors = ["grey", "green", "#F6E481", "black", "red"];
     let labelValue = function(d) { return d[0]; };
     let quantityValue = function(d) { return d[1]; };
@@ -15,56 +14,58 @@ function donutChart() {
     let donutArc = arc();
     let donutPie = pie();
 
+    let _data = [];
+    let updateData = function(){ return null; };
+
 
     function chart(selection) {
-        selection.each(function(data){
+        selection.each(function(){
             const radius = Math.min(width, height) / 2;
 
             donutArc
-                .outerRadius(radius * 0.8)
-                .innerRadius(radius * 0.5);
+                .outerRadius(radius)
+                .innerRadius(radius * 0.6);
 
             donutPie.value(function(d){
-                return d.size;
+                return labelValue(d);
             }).sort(null);
 
-            // start render
-            // Select the svg element, if it exists.
-            const svg = select(this).selectAll("svg").data([data]);
-
-            // Otherwise, create the skeletal chart.
-            const svgEnter = svg.enter().append("svg");
-            svgEnter.append("g"); // location of line
-
-            // position and size the svg container
-            // Using viewbox to make chart responsive
-            // must assign at least one size attribute or else most browsers
-            // will implicitly apply width: 100%, height: auto to the svg (too large)
-            svg.merge(svgEnter)
+            const svg = select(this).append("svg")
                 .attr("viewBox", `0,0,${width},${height}`)
                 .attr("perserveAspectRatio", "xMinYmid meet")
                 .style("max-width", `${width}px`);
 
-            // positioning chart area
-            const chartArea = svg.merge(svgEnter).select("g")
-                .attr("transform", `translate(${width/2},${height/2})`)
+            const chartArea = svg.append("g")
+                .attr("transform", `translate(${width/2},${height/2})`);
 
             const paths = chartArea.selectAll("path")
-                .data(donutPie(data))
+                    .data(donutPie(_data))
+                    .enter()
+                .append("path")
+                    .attr("class", "arc");
 
-            paths.enter().append("path")
-                .each(function (d) { this._current = d; })
-                .attr('class', 'arc')
-                // d arg is not used, but needed because index is second arg
-                .attr('fill', function (d, i) {
-                    return donutScale(i);
-                })
-                .attr('d', donutArc)
+            paths.transition()
+                .attr("fill", function(d,i){ return donutScale(i); })
+                .attr("d", donutArc)
+                .each(function(d){this._current = d});
 
-            paths.transition().duration(750).attrTween("d", arcTween)
-                .attr('fill', function (d, i) {
-                    return donutScale(i);
-                })
+            updateData = function() {
+                const pathUpdate = chartArea.selectAll("path")
+                        .data(donutPie(_data))
+
+                pathUpdate.enter()
+                    .append("path")
+                        .attr("class", "arc")
+                        .attr("fill", function(d,i){ return donutScale(i); })
+                        .attr("d", donutArc)
+                        .each(function(d){this._current = d});
+
+                pathUpdate
+                    .transition().duration(750)
+                    .attrTween("d", arcTween);
+
+                pathUpdate.exit().remove();
+            }
         })
     }
 
@@ -88,12 +89,6 @@ function donutChart() {
         return chart;
     }
 
-    chart.margin = function(value) {
-        if (!arguments.length) return margin;
-        margin = value;
-        return chart;
-    }
-
     chart.colors = function(value) {
         if (!arguments.length) return colors;
         colors = value;
@@ -112,6 +107,12 @@ function donutChart() {
         return chart;
     };
 
+    chart.data = function(value) {
+        if (!arguments.length) return _data;
+        _data = value;
+        updateData();
+        return chart;
+    }
     return chart;
 }
 
