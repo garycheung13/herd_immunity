@@ -28,7 +28,7 @@ gulp.task("bundle", function () {
     browserify({
             entries: "src/js/main.js",
             debug: true
-        }).transform(babelify, { presets: ["@babel/preset-es2015"]})
+        }).transform(babelify, { presets: ["@babel/preset-env"]})
         .bundle()
         .pipe(source("main.min.js"))
         .pipe(buffer())

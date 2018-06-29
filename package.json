@@ -8,7 +8,7 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.51",
-    "@babel/preset-es2015": "^7.0.0-beta.51",
+    "@babel/preset-env": "^7.0.0-beta.51",
     "babelify": "^9.0.0",
     "browser-sync": "^2.24.4",
     "browserify": "^16.2.2",
@@ -24,7 +24,9 @@
   "dependencies": {
     "d3-array": "^1.2.1",
     "d3-axis": "^1.0.8",
+    "d3-force": "^1.1.0",
     "d3-interpolate": "^1.2.0",
+    "d3-random": "^1.1.0",
     "d3-scale": "^2.1.0",
     "d3-selection": "^1.3.0",
     "d3-shape": "^1.2.0",
