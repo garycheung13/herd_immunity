@@ -30,3 +30,13 @@ export function herdImmunity(rZero, vaccEffect=1.00) {
 export function averageSample(sampleSize, targetSize, populationSize) {
     return Math.ceil(sampleSize * (targetSize/populationSize));
 }
+
+export function delay(duration, func) {
+    var args = Array.prototype.slice.call(arguments, 2);
+  
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        resolve(func.apply(null, args));
+      }, duration);
+    });
+  }

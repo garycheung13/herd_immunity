@@ -3,7 +3,7 @@ import { select } from 'd3-selection';
 import { ascending } from 'd3-array';
 import {forceSimulation, forceManyBody, forceCenter, forceCollide } from 'd3-force';
 import { transition } from 'd3-transition';
-import { distance } from './utils';
+import { distance, delay } from './utils';
 
 function herdSimulation() {
     let width = 500;
@@ -11,11 +11,19 @@ function herdSimulation() {
     let _data = [];
     let radius = 7.5;
     let CYCLES = 10;
+    let counter = 0;
+    let state = {
+        inProgress: false
+    }
+    let subscribers = [];
 
 
     function layout(selection) {
         selection.each(function(){
-            // start building up svg
+            // remove everything
+            select(this).selectAll("*").remove();
+
+            // append and start building up svg
             const svg = select(this).append("svg")
                 .attr("viewBox", `0,0,${width},${height}`)
                 .attr("perserveAspectRatio", "xMinYmid meet")
@@ -48,9 +56,18 @@ function herdSimulation() {
                 }).on("end", function(){
                     // simulate introduction of disease x # of cycles
                     // setTimeout spaces out the animations
+                    state.inProgress = true;
+                    let promises = [];
+
                     for (let i=0; i < CYCLES; i++) {
-                        setTimeout(infect.bind(null, svg, 50), i * 1000);
+                        promises.push(delay(i * 1000, infect.bind(null, svg, 50)));
+                        // setTimeout(infect.bind(null, svg, 50), i * 1000);
                     }
+
+                    Promise.all(promises).then(function(){
+                        state.inProgress = false;
+                        console.log(state.inProgress);
+                    })
                 })
         })
     }
@@ -67,7 +84,7 @@ function herdSimulation() {
             .attr("id", "movingDot")
             .attr("fill", "red")
             .attr("r", 7.5)
-            .attr("cx", randomUniform(500))
+            .attr("cx", randomUniform(width))
             .attr("cy", "50");
 
         // move to position of selected node
@@ -100,6 +117,10 @@ function herdSimulation() {
             .transition()
             .attr("opacity", 0)    
         }
+        subscribers.forEach(function(callback){
+            callback(state.inProgress);
+        });
+        
     }
     layout.width = function(value) {
         if (!arguments.length) return width;
@@ -116,6 +137,17 @@ function herdSimulation() {
     layout.data = function(value) {
         if (!arguments.length) return _data;
         _data = value;
+        return layout;
+    }
+
+    layout.radius = function(value) {
+        if (!arguments.length) return radius;
+        radius = value;
+        return layout;
+    }
+
+    layout.subscribe = function(value) {
+        subscribers.push(value);
         return layout;
     }
 
