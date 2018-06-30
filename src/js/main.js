@@ -1,45 +1,33 @@
 import lineGraph from './lineGraph';
 import donutChart from './donutChart';
+import herdSimulation from './herdSimulation';
+import { shuffle, range } from 'd3-array';
 import { select } from 'd3-selection';
-import { transition } from 'd3-transition';
 import "./inputEvents";
 import * as utils from './utils';
 
-const fakeData = [{
-  label: "Vaccinated and immune",
-  size: Math.random() * 100
-}, {
-  label: "Vaccinated but vulnerable",
-  size: 0
-}, {
-  label: "Not vaccinated",
-  size: 0
-}, {
-  label: "Infected",
-  size: 0
-}]
-
-const donut = donutChart()
-  .label(function(d){ return d.size })
-  .data(fakeData)
-
-select('#chart').call(donut);
-
-document.getElementById("test-update-button").addEventListener("click", function(){
-  donut.data([{
-    label: "Vaccinated and immune",
-    size: Math.random() * 100
-  }, {
-    label: "Vaccinated but vulnerable",
-    size: Math.random() * 100
-  }, {
-    label: "Not vaccinated",
-    size: Math.random() * 100
-  }, {
-    label: "Infected",
-    size: Math.random() * 100
-  }]);
-})
-
-console.log(utils.distance({x: 1, y: 2}, {x: 5, y: 10}));
-console.log(utils.herdImmunity(7, 0.88));
+const nodes = shuffle(
+  range(250).map(function(value, index){
+      if (index <= 125) {
+          return {
+              color: "green",
+              isInfectable: false,
+              status: "vaccinated"
+          }
+      } else if (index > 50 && index <= 149) {
+          return {
+              color: "steelblue",
+              isInfectable: true,
+              status: "noEffect"
+          }
+      } else {
+          return {
+              color: "black",
+              isInfectable: true,
+              status: "unvaccinated"
+          }
+      }
+  })
+);
+const sim = herdSimulation().data(nodes);
+select("#chart").call(sim);
