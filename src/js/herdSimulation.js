@@ -3,17 +3,25 @@ import { select } from 'd3-selection';
 import { ascending } from 'd3-array';
 import {forceSimulation, forceManyBody, forceCenter, forceCollide } from 'd3-force';
 import { transition } from 'd3-transition';
+
 import { distance, delay } from './utils';
+import { CYCLES, INFECTED_COLOR } from './constants';
+
 
 function herdSimulation() {
     let width = 500;
     let height = 500;
     let _data = [];
     let radius = 7.5;
-    let CYCLES = 10;
-    let counter = 0;
+    // let CYCLES = 2;
     let state = {
-        inProgress: false
+        inProgress: false,
+        splits: {
+            unvaccinated: 0,
+            vaccinated: 0,
+            unprotected: 0,
+            infected: 0
+        },
     }
     let subscribers = [];
 
@@ -28,6 +36,14 @@ function herdSimulation() {
                 .attr("viewBox", `0,0,${width},${height}`)
                 .attr("perserveAspectRatio", "xMinYmid meet")
                 .style("max-width", `${width}px`);
+
+            // update the segments splits based on their names
+            for (segmentKey in state.splits) {
+                const segment = _data.filter(function(row){
+                    return row.status == segmentKey;
+                });
+                state.splits[segmentKey] = segment.length;
+            }
 
             // force layout settings
             const simulation = forceSimulation(_data)
@@ -66,7 +82,6 @@ function herdSimulation() {
 
                     Promise.all(promises).then(function(){
                         state.inProgress = false;
-                        console.log(state.inProgress);
                     })
                 })
         })
@@ -79,10 +94,11 @@ function herdSimulation() {
         const INITIAL_MOVEMENT_TIME = 500;
     
         // additional circle for animating diease attack
+        // picks a random x position based on the width 
         const movingDot = selection.append("circle")
             .datum([{x: 5,y: 5}]) 
             .attr("id", "movingDot")
-            .attr("fill", "red")
+            .attr("fill", INFECTED_COLOR)
             .attr("r", 7.5)
             .attr("cx", randomUniform(width))
             .attr("cy", "50");
@@ -106,9 +122,26 @@ function herdSimulation() {
                 .transition().delay(function(d, i){ return INITIAL_MOVEMENT_TIME + i * 10})
                 .duration(500)
                 .attr("r", radius * 1.2)
-                .attr("fill", "red")
+                .attr("fill", INFECTED_COLOR)
                 .transition()
-                .attr("r", radius);      
+                .attr("r", radius);
+            
+            // get the datum from the last node so that a overlay can be drawn.
+            const nodesLength = allNodes.nodes().length;
+            const lastNodeDatum = select(allNodes.nodes()[nodesLength - 1]).datum();
+             
+            selection.append("circle")
+                .attr("r", radius)
+                .attr("class", "overlay")
+                .attr("fill", INFECTED_COLOR)
+                .attr("opacity", 0.2)
+                .attr("cx", randomNodeDatum.x)
+                .attr("cy", randomNodeDatum.y)
+                .transition().delay(INITIAL_MOVEMENT_TIME + (nodesLength * 10))
+                .attr("r", function(){
+                    return distance(randomNodeDatum, lastNodeDatum);
+                })
+
         } else {
             // bounce off if not infectable
             movingDot.transition().delay(1000).duration(1500)

@@ -1,3 +1,7 @@
+import { shuffle, range } from 'd3-array';
+import * as constants from './constants';
+
+
 /**
  * Calculates the euclidean distance between to points
  * @param {Object} a: object with x and y properties
@@ -7,6 +11,7 @@
 export function distance(a, b) {
     return Math.sqrt(((b.x - a.x) ** 2 + (b.y - a.y) ** 2));
 }
+
 
 /**
  * Calcuate the threshold needed to reach herd immunity threshold.
@@ -31,12 +36,79 @@ export function averageSample(sampleSize, targetSize, populationSize) {
     return Math.ceil(sampleSize * (targetSize/populationSize));
 }
 
-export function delay(duration, func) {
-    var args = Array.prototype.slice.call(arguments, 2);
+
+/** 
+ * Promise wrapper around the setTimeout function
+ * @param {number} duration: duration to wait in milliseconds
+ * @param {function} callback: function to call after delay
+ * @returns {Promise}: pending promise object. chainable.
+*/
+export function delay(duration, callback) {
+    const args = Array.prototype.slice.call(arguments, 2);
   
     return new Promise(function (resolve) {
       setTimeout(function () {
-        resolve(func.apply(null, args));
+        resolve(callback.apply(null, args));
       }, duration);
     });
+}
+
+
+/**
+ * Generates the splits needed to calculate herd objects
+ * @param {number} populationSize: total population sizze
+ * @param {number} percentVaccinated: percentage vaccinated as a floating point
+ * @param {number} vaccEffect: effectiveness of the vaccine as a percentage in a float
+ * @return {Object} Returns the population splits as on object with segments as object properties
+ */
+export function calculateSplits(populationSize, percentVaccinated, vaccEffect) {
+  const unvaccinatedPop = Math.round(populationSize - (percentVaccinated * populationSize));
+  const vaccinatedPop = Math.round((populationSize - unvaccinatedPop) * vaccEffect);
+  const unprotectedPop = populationSize - unvaccinatedPop - vaccinatedPop;
+
+  return {
+    unvaccinated: unvaccinatedPop,
+    vaccinated: vaccinatedPop,
+    unprotected: unprotectedPop
   }
+}
+
+
+/**
+ * Generates the population objects used for the simulation with necessary properties
+ * @param {number} populationSize: total population sizze
+ * @param {number} percentVaccinated: percentage vaccinated as a floating point
+ * @param {number} vaccEffect: effectiveness of the vaccine as a percentage in a float
+ * @return {Array} a randomized array of objects representing the population based on the parameters given
+ */
+export function initHerd(populationSize, percentVaccinated, vaccEffect) {
+  // calculate the proportions of the population segements
+  const unvaccinatedPop = Math.round(populationSize - (percentVaccinated * populationSize));
+  const vaccinatedPop = Math.round((populationSize - unvaccinatedPop) * vaccEffect);
+  const unprotectedPop = populationSize - unvaccinatedPop - vaccinatedPop;
+
+  const populationObjects = range(populationSize).map(function(node, i){
+    if (i < unvaccinatedPop) {
+      return {
+        isInfectable: true,
+        status: "unvaccinated",
+        color: constants.UNVACCINATED_COLOR
+
+      }
+    } else if (i >= unvaccinatedPop && i < (populationSize - unprotectedPop)) {
+      return {
+        isInfectable: false,
+        status: "vaccinated",
+        color: constants.VACCINATED_COLOR
+      }
+    } else {
+      return {
+        isInfectable: true,
+        status: "unprotected",
+        color: constants.UNPROTECTED_COLOR
+      }
+    }
+  })
+
+  return shuffle(populationObjects);
+}
