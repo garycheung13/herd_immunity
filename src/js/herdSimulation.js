@@ -6,6 +6,7 @@ import { transition } from 'd3-transition';
 
 import { distance, delay } from './utils';
 import { CYCLES, INFECTED_COLOR } from './constants';
+import pubSub from './pubSub';
 
 
 function herdSimulation() {
@@ -13,7 +14,7 @@ function herdSimulation() {
     let height = 500;
     let _data = [];
     let radius = 7.5;
-    // let CYCLES = 2;
+    let pubSubManager = new pubSub();
     let state = {
         inProgress: false,
         splits: {
@@ -22,9 +23,11 @@ function herdSimulation() {
             unprotected: 0,
             infected: 0
         },
+        counter: 0,
     }
-    let subscribers = [];
 
+    // line below delete before merging
+    // console command for counting nodes document.querySelectorAll("circle[fill='rgb(255, 0, 0)']")
 
     function layout(selection) {
         selection.each(function(){
@@ -37,13 +40,16 @@ function herdSimulation() {
                 .attr("perserveAspectRatio", "xMinYmid meet")
                 .style("max-width", `${width}px`);
 
-            // update the segments splits based on their names
-            for (segmentKey in state.splits) {
+            Object.keys(state.splits).forEach(function(segmentKey){
                 const segment = _data.filter(function(row){
                     return row.status == segmentKey;
                 });
                 state.splits[segmentKey] = segment.length;
-            }
+            })
+
+            state.counter = 0;
+            pubSubManager.publish("splits", state.splits);
+            pubSubManager.publish("simRunning", true)
 
             // force layout settings
             const simulation = forceSimulation(_data)
@@ -72,17 +78,13 @@ function herdSimulation() {
                 }).on("end", function(){
                     // simulate introduction of disease x # of cycles
                     // setTimeout spaces out the animations
-                    state.inProgress = true;
                     let promises = [];
-
                     for (let i=0; i < CYCLES; i++) {
                         promises.push(delay(i * 1000, infect.bind(null, svg, 50)));
-                        // setTimeout(infect.bind(null, svg, 50), i * 1000);
                     }
-
                     Promise.all(promises).then(function(){
-                        state.inProgress = false;
-                    })
+                        pubSubManager.publish("simRunning", false)
+                    });
                 })
         })
     }
@@ -112,23 +114,30 @@ function herdSimulation() {
         if (randomNodeDatum.isInfectable) {
             const allNodes = selection.selectAll('.node').sort(function(a, b){  
                 return ascending(distance(randomNodeDatum, a), distance(randomNodeDatum, b));
-            }).filter(function(d, i){
+            })         
+            
+            const spreadSelection = allNodes.filter(function(d, i){
                 // filter out any nodes in range that are uninfectable or checked already
                 return i < spreadSize && d.isInfectable && !select(this).classed("checked");
             });
             
             // mark the node as checked and animate and infection
-            allNodes.classed("checked", true)
+            spreadSelection.classed("checked", true)
                 .transition().delay(function(d, i){ return INITIAL_MOVEMENT_TIME + i * 10})
                 .duration(500)
                 .attr("r", radius * 1.2)
                 .attr("fill", INFECTED_COLOR)
                 .transition()
-                .attr("r", radius);
+                .attr("r", radius)
+                .each(function(){
+                    state.counter++;
+                    console.log(state.counter);
+                })
+            
             
             // get the datum from the last node so that a overlay can be drawn.
-            const nodesLength = allNodes.nodes().length;
-            const lastNodeDatum = select(allNodes.nodes()[nodesLength - 1]).datum();
+            const nodesLength = spreadSelection.nodes().length;
+            const lastNodeDatum = select(spreadSelection.nodes()[nodesLength - 1]).datum();
              
             selection.append("circle")
                 .attr("r", radius)
@@ -140,7 +149,7 @@ function herdSimulation() {
                 .transition().delay(INITIAL_MOVEMENT_TIME + (nodesLength * 10))
                 .attr("r", function(){
                     return distance(randomNodeDatum, lastNodeDatum);
-                })
+                });
 
         } else {
             // bounce off if not infectable
@@ -150,11 +159,16 @@ function herdSimulation() {
             .transition()
             .attr("opacity", 0)    
         }
-        subscribers.forEach(function(callback){
-            callback(state.inProgress);
-        });
-        
     }
+
+    function spread(nodes, rZero) {
+        const initialSpread = nodes.filter(function(d, i){
+            return i < rZero && d.isInfectable;
+        });
+
+        return rZero + (rZero * initialSpread.nodes().length);
+    }
+
     layout.width = function(value) {
         if (!arguments.length) return width;
         width = value;
@@ -180,7 +194,7 @@ function herdSimulation() {
     }
 
     layout.subscribe = function(value) {
-        subscribers.push(value);
+        pubSubManager.subscribe("splits", value);
         return layout;
     }
 
