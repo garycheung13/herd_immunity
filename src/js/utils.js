@@ -32,7 +32,7 @@ export function herdImmunity(rZero, vaccEffect=1.00) {
  * @param {number} populationSize: Total size of the population
  * @returns {number}: Average number of desired items
  */
-export function averageSample(sampleSize, targetSize, populationSize) {
+export function expectedValue(sampleSize, targetSize, populationSize) {
     return Math.ceil(sampleSize * (targetSize/populationSize));
 }
 
@@ -52,6 +52,16 @@ export function delay(duration, callback) {
       }, duration);
     });
 }
+
+export function sigma(max, callback) {
+  return Array.from(Array(max).keys())
+    .map(callback).reduce((accumulator, current) => {
+      return accumulator + current;
+    });
+}
+// console.log(sigma(5, function(d){
+//   return (100 - d * 4)/(250 - d * 4)
+// }) * 10)
 
 
 /**

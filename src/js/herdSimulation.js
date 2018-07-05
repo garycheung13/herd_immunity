@@ -12,7 +12,7 @@ import pubSub from './pubSub';
 function herdSimulation() {
     let width = 500;
     let height = 500;
-    let _data = [];
+
     let radius = 7.5;
     let pubSubManager = new pubSub();
     let state = {
@@ -25,21 +25,23 @@ function herdSimulation() {
         },
         counter: 0,
     }
+    let _data = [];
+    let rZero = null;
 
     // line below delete before merging
     // console command for counting nodes document.querySelectorAll("circle[fill='rgb(255, 0, 0)']")
 
     function layout(selection) {
+        if (!rZero) {
+            throw new Error("rZero for simulation not set");
+        }
+
         selection.each(function(){
-            // remove everything
-            select(this).selectAll("*").remove();
+            // simulation reset tasks
+            select(this).selectAll("*").remove();       
+            state.counter = 0;
 
-            // append and start building up svg
-            const svg = select(this).append("svg")
-                .attr("viewBox", `0,0,${width},${height}`)
-                .attr("perserveAspectRatio", "xMinYmid meet")
-                .style("max-width", `${width}px`);
-
+            // gathering herd data for interested modules
             Object.keys(state.splits).forEach(function(segmentKey){
                 const segment = _data.filter(function(row){
                     return row.status == segmentKey;
@@ -47,9 +49,16 @@ function herdSimulation() {
                 state.splits[segmentKey] = segment.length;
             })
 
-            state.counter = 0;
+            // boardcast state changes
             pubSubManager.publish("splits", state.splits);
             pubSubManager.publish("simRunning", true)
+
+            // *** begin rendering here ***
+            // append and start building up svg
+            const svg = select(this).append("svg")
+                .attr("viewBox", `0,0,${width},${height}`)
+                .attr("perserveAspectRatio", "xMinYmid meet")
+                .style("max-width", `${width}px`);
 
             // force layout settings
             const simulation = forceSimulation(_data)
@@ -80,17 +89,17 @@ function herdSimulation() {
                     // setTimeout spaces out the animations
                     let promises = [];
                     for (let i=0; i < CYCLES; i++) {
-                        promises.push(delay(i * 1000, infect.bind(null, svg, 50)));
+                        promises.push(delay(i * 1000, infect.bind(null, svg, rZero)));
                     }
                     Promise.all(promises).then(function(){
-                        pubSubManager.publish("simRunning", false)
+                        pubSubManager.publish("simRunning", false);
                     });
                 })
         })
     }
 
     // handles the infection simulation and animations
-    function infect(selection, spreadSize) {
+    function infect(selection, rZero) {
         const randomID = randomUniform(0, 250)();
         const randomNodeDatum = selection.select(`#node_${Math.round(randomID)}`).datum();
         const INITIAL_MOVEMENT_TIME = 500;
@@ -116,6 +125,7 @@ function herdSimulation() {
                 return ascending(distance(randomNodeDatum, a), distance(randomNodeDatum, b));
             })         
             
+            const spreadSize = spread(allNodes, rZero);
             const spreadSelection = allNodes.filter(function(d, i){
                 // filter out any nodes in range that are uninfectable or checked already
                 return i < spreadSize && d.isInfectable && !select(this).classed("checked");
@@ -134,7 +144,7 @@ function herdSimulation() {
                     console.log(state.counter);
                 })
             
-            
+            // overlay logic
             // get the datum from the last node so that a overlay can be drawn.
             const nodesLength = spreadSelection.nodes().length;
             const lastNodeDatum = select(spreadSelection.nodes()[nodesLength - 1]).datum();
@@ -195,6 +205,12 @@ function herdSimulation() {
 
     layout.subscribe = function(value) {
         pubSubManager.subscribe("splits", value);
+        return layout;
+    }
+
+    layout.rZero = function(value) {
+        if (!arguments.length) return rZero;
+        rZero = value;
         return layout;
     }
 
