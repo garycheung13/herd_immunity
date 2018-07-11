@@ -3,6 +3,7 @@ import { sigma } from './utils';
 
 export function generateDataSet(sampleSize, population, cycles) {
 	return INTERVAL_SET.map(function(percentVacc) {
+        // save the max infection size since some vaccination rates will use it
         const maxPossible = Math.round(population * (1 - percentVacc));
     
         let total = 0;
@@ -13,7 +14,8 @@ export function generateDataSet(sampleSize, population, cycles) {
         if (maxPossible === 0) {
           return maxPossible;
         }
-    
+
+        // calcuate the expected value of the infection spread over multiple infection cycles
         for (let i=0; i < cycles; i++) {
           const expectedValue = Math.round(sampleSize * (runningPossible/population));
           // dont bother with further loopinng if max infection is achieved
