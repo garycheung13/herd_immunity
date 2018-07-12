@@ -11,7 +11,10 @@ export function generateDataSet(sampleSize, population, cycles, vaccEffect=1) {
 
         // don't bother with looping if there are no targets
         if (maxPossible === 0) {
-          return maxPossible;
+          return {
+            interval: percentVacc,
+            percentInfected: (total >= maxPossible) ? maxPossible/population : total/population
+          };
         }
 
         // calcuate the expected value of the infection spread over multiple infection cycles
@@ -33,9 +36,9 @@ export function generateDataSet(sampleSize, population, cycles, vaccEffect=1) {
           runningPossible -= summation;
           runningPopulation -= summation;
         }
-            return {
-              interval: percentVacc,
-              percentInfected: (total >= maxPossible) ? maxPossible/population : total/population
-            };
+        return {
+          interval: percentVacc,
+          percentInfected: (total >= maxPossible) ? maxPossible/population : total/population
+        };
         });
   }
