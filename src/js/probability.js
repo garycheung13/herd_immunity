@@ -1,15 +1,14 @@
 import { INTERVAL_SET } from './constants';
 import { sigma } from './utils';
 
-export function generateDataSet(sampleSize, population, cycles) {
+export function generateDataSet(sampleSize, population, cycles, vaccEffect=1) {
 	return INTERVAL_SET.map(function(percentVacc) {
         // save the max infection size since some vaccination rates will use it
-        const maxPossible = Math.round(population * (1 - percentVacc));
-    
+        const maxPossible = Math.round(population - (population * vaccEffect * percentVacc));
         let total = 0;
-        let runningPossible = Math.round(population * (1 - percentVacc));
+        let runningPossible = maxPossible;
         let runningPopulation = population;
-    
+
         // don't bother with looping if there are no targets
         if (maxPossible === 0) {
           return maxPossible;
@@ -34,6 +33,9 @@ export function generateDataSet(sampleSize, population, cycles) {
           runningPossible -= summation;
           runningPopulation -= summation;
         }
-            return (total >= maxPossible) ? maxPossible/population : total/population;
+            return {
+              interval: percentVacc,
+              percentInfected: (total >= maxPossible) ? maxPossible/population : total/population
+            };
         });
   }

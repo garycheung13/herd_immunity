@@ -96,7 +96,6 @@ function lineGraph(){
                     .attr("x2", xScale(value))
                     .attr("y1", 0)
                     .attr("y2", height - margin.top - margin.bottom);
-
             }
         })
     }

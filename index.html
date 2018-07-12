@@ -127,30 +127,35 @@
             location distribution of the vaccinated, unvaccinated and vaccinated but vulnerable is randomly distributed. This will cause some variation the
             simulation, but you view see the average results on the line graph.
         </p>
-        <div>
-            <form id="sim-settings" action="/">
-                <label class="form-label" for="r-number">
-                    Reproductive Rate &#40;R<sub>0</sub>&#41;<br>
-                    <span class="subtitle">Set how aggressively the disease will spread.</span>
-                </label>
-                <input type="range" name="r-number" value="10" id="r-number" min="1" max="20">
-                <span class="form-display" id="r-number__display">10</span>
+        <div class="row">
+            <!-- feedback graph -->
+            <div id="line-graph" class="col-lg-9"></div>
 
-                <label for="vac-effect" class="form-label">
-                    Vaccine Effectiveness <br>
-                    <span class="subtitle">Set the effectiveness of the vaccine</span>
-                </label>
-                <input name="vac-effect" type="range" value="50" id="vac-effect" min="1" max="100">
-                <span class="form-display" id="vac-effect__display">50</span>
+            <div class="col-lg-3">
+                <form id="sim-settings" action="/">
+                    <label class="form-label" for="r-number">
+                        Reproductive Rate &#40;R<sub>0</sub>&#41;<br>
+                        <span class="subtitle">Set how aggressively the disease will spread.</span>
+                    </label>
+                    <input type="range" name="r-number" value="10" id="r-number" min="1" max="20">
+                    <span class="form-display" id="r-number__display">10</span>
 
-                <label for="percent-vac" class="form-label">
-                    Percent Vaccinated <br>
-                    <span class="subtitle">How many people will be vaccinated?</span>
-                </label>
-                <input name="percent-vac" type="range" value="50" id="percent-vac" min="1" max="100">
-                <span class="form-display" id="percent-vac__display">50</span>
-            </form>
-            <button>Start Sim</button>
+                    <label for="vac-effect" class="form-label">
+                        Vaccine Effectiveness <br>
+                        <span class="subtitle">Set the effectiveness of the vaccine</span>
+                    </label>
+                    <input name="vac-effect" type="range" value="50" id="vac-effect" min="1" max="100">
+                    <span class="form-display" id="vac-effect__display">50</span>
+
+                    <label for="percent-vac" class="form-label">
+                        Percent Vaccinated <br>
+                        <span class="subtitle">How many people will be vaccinated?</span>
+                    </label>
+                    <input name="percent-vac" type="range" value="50" id="percent-vac" min="1" max="100">
+                    <span class="form-display" id="percent-vac__display">50</span>
+                </form>
+                <button>Start Sim</button>
+            </div>
         </div>
     </section>
     <section>

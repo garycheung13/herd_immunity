@@ -37,7 +37,7 @@ export function expectedValue(sampleSize, targetSize, populationSize) {
 }
 
 
-/** 
+/**
  * Promise wrapper around the setTimeout function
  * @param {number} duration: duration to wait in milliseconds
  * @param {function} callback: function to call after delay
@@ -45,7 +45,7 @@ export function expectedValue(sampleSize, targetSize, populationSize) {
 */
 export function delay(duration, callback) {
     const args = Array.prototype.slice.call(arguments, 2);
-  
+
     return new Promise(function (resolve) {
       setTimeout(function () {
         resolve(callback.apply(null, args));
@@ -59,10 +59,6 @@ export function sigma(max, callback) {
       return accumulator + current;
     });
 }
-// console.log(sigma(5, function(d){
-//   return (100 - d * 4)/(250 - d * 4)
-// }) * 10)
-
 
 /**
  * Generates the splits needed to calculate herd objects

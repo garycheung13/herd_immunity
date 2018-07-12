@@ -4,6 +4,10 @@
     flex-direction: row;
 }
 
+.col-lg-3 {
+    flex-basis: 25%;
+}
+
 .col-lg-4 {
     flex-basis: 33.33%;
 }
@@ -14,6 +18,10 @@
 
 .col-lg-8 {
     flex-basis: 66.67%;
+}
+
+.col-lg-9 {
+    flex-basis: 75%;
 }
 
 .col-lg-12 {
