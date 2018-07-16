@@ -10,8 +10,8 @@ import pubSub from './pubSub';
 
 
 function herdSimulation() {
-    let width = 500;
-    let height = 500;
+    let width = 600;
+    let height = 600;
 
     let radius = 7.5;
     let pubSubManager = new pubSub();
@@ -38,8 +38,8 @@ function herdSimulation() {
 
         selection.each(function(){
             // simulation reset tasks
-            select(this).selectAll("*").remove();       
-            state.counter = 0;
+            select(this).selectAll("*").remove();
+            state.splits.infected = 0;
 
             // gathering herd data for interested modules
             Object.keys(state.splits).forEach(function(segmentKey){
@@ -103,11 +103,11 @@ function herdSimulation() {
         const randomID = randomUniform(0, 250)();
         const randomNodeDatum = selection.select(`#node_${Math.round(randomID)}`).datum();
         const INITIAL_MOVEMENT_TIME = 500;
-    
+
         // additional circle for animating diease attack
-        // picks a random x position based on the width 
+        // picks a random x position based on the width
         const movingDot = selection.append("circle")
-            .datum([{x: 5,y: 5}]) 
+            .datum([{x: 5,y: 5}])
             .attr("id", "movingDot")
             .attr("fill", INFECTED_COLOR)
             .attr("r", 7.5)
@@ -121,16 +121,16 @@ function herdSimulation() {
             .attr("cy", randomNodeDatum.y);
 
         if (randomNodeDatum.isInfectable) {
-            const allNodes = selection.selectAll('.node').sort(function(a, b){  
+            const allNodes = selection.selectAll('.node').sort(function(a, b){
                 return ascending(distance(randomNodeDatum, a), distance(randomNodeDatum, b));
-            })         
-            
+            })
+
             const spreadSize = spread(allNodes, rZero);
             const spreadSelection = allNodes.filter(function(d, i){
                 // filter out any nodes in range that are uninfectable or checked already
                 return i < spreadSize && d.isInfectable && !select(this).classed("checked");
             });
-            
+
             // mark the node as checked and animate and infection
             spreadSelection.classed("checked", true)
                 .transition().delay(function(d, i){ return INITIAL_MOVEMENT_TIME + i * 10})
@@ -139,16 +139,17 @@ function herdSimulation() {
                 .attr("fill", INFECTED_COLOR)
                 .transition()
                 .attr("r", radius)
-                .each(function(){
-                    state.counter++;
-                    console.log(state.counter);
+                .each(function(d){
+                    console.log(d);
+                    state.splits.infected++;
+                    pubSubManager.publish("splits", state.splits);
                 })
-            
+
             // overlay logic
             // get the datum from the last node so that a overlay can be drawn.
             const nodesLength = spreadSelection.nodes().length;
             const lastNodeDatum = select(spreadSelection.nodes()[nodesLength - 1]).datum();
-             
+
             selection.append("circle")
                 .attr("r", radius)
                 .attr("class", "overlay")
@@ -167,7 +168,7 @@ function herdSimulation() {
             .attr("cx", 0)
             .attr("cy", 0)
             .transition()
-            .attr("opacity", 0)    
+            .attr("opacity", 0)
         }
     }
 
@@ -203,8 +204,8 @@ function herdSimulation() {
         return layout;
     }
 
-    layout.subscribe = function(value) {
-        pubSubManager.subscribe("splits", value);
+    layout.subscribe = function(topic, value) {
+        pubSubManager.subscribe(topic, value);
         return layout;
     }
 

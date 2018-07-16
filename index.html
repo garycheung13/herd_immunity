@@ -158,15 +158,21 @@
                 <div class="equation interactive-formula">Q<sub>c</sub> = 1 – &#40;1/R<sub>0</sub>&#41;</div>
                 <div class="equation interactive-formula">V<sub>c</sub> = Q<sub>c</sub>/<i>E</i></div>
 
-                <button>Start Sim</button>
+                <button id="start-trigger">Start Sim</button>
             </div>
         </div>
     </section>
     <section>
-            <div id="chart">
-                <p>Press Start to begin</p>
+        <div class="row">
+            <div id="herd-container" class="col-lg-6">
+                <h3>Simulation Display</h3>
+                <p>Press Start Simulation button to start outbreak</p>
             </div>
-            <button id="update">Test</button>
+            <div id="donut-container" class="col-lg-6">
+                <h3>Current Simulation Population Distribution</h3>
+                <p>Hover to see segment details</p>
+            </div>
+        </div>
     </section>
     <script src="dist/main.min.js"></script>
 </body>
