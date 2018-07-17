@@ -101,9 +101,10 @@ function herdSimulation() {
     // handles the infection simulation and animations
     function infect(selection, rZero) {
         const randomID = randomUniform(0, 250)();
-        const randomNodeDatum = selection.select(`#node_${Math.round(randomID)}`).datum();
+        const randomNode = selection.select(`#node_${Math.round(randomID)}`)
+        const randomNodeDatum = randomNode.datum();
         const INITIAL_MOVEMENT_TIME = 500;
-
+        // console.log(randomNode.classed("checked"));
         // additional circle for animating diease attack
         // picks a random x position based on the width
         const movingDot = selection.append("circle")
@@ -120,7 +121,8 @@ function herdSimulation() {
             .attr("cx", randomNodeDatum.x)
             .attr("cy", randomNodeDatum.y);
 
-        if (randomNodeDatum.isInfectable) {
+        // do distance and infection calcs only when node is infectable and unchecked
+        if (randomNodeDatum.isInfectable && !randomNode.classed("checked")) {
             const allNodes = selection.selectAll('.node').sort(function(a, b){
                 return ascending(distance(randomNodeDatum, a), distance(randomNodeDatum, b));
             })
@@ -140,7 +142,6 @@ function herdSimulation() {
                 .transition()
                 .attr("r", radius)
                 .each(function(d){
-                    console.log(d);
                     state.splits.infected++;
                     pubSubManager.publish("splits", state.splits);
                 })
