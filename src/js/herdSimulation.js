@@ -30,7 +30,6 @@ function herdSimulation() {
 
     // line below delete before merging
     // console command for counting nodes document.querySelectorAll("circle[fill='rgb(255, 0, 0)']")
-
     function layout(selection) {
         if (!rZero) {
             throw new Error("rZero for simulation not set");
@@ -104,7 +103,7 @@ function herdSimulation() {
         const randomNode = selection.select(`#node_${Math.round(randomID)}`)
         const randomNodeDatum = randomNode.datum();
         const INITIAL_MOVEMENT_TIME = 500;
-        // console.log(randomNode.classed("checked"));
+
         // additional circle for animating diease attack
         // picks a random x position based on the width
         const movingDot = selection.append("circle")
@@ -121,7 +120,7 @@ function herdSimulation() {
             .attr("cx", randomNodeDatum.x)
             .attr("cy", randomNodeDatum.y);
 
-        // do distance and infection calcs only when node is infectable and unchecked
+        // perform distance and infection calcs only when node is infectable and unchecked
         if (randomNodeDatum.isInfectable && !randomNode.classed("checked")) {
             const allNodes = selection.selectAll('.node').sort(function(a, b){
                 return ascending(distance(randomNodeDatum, a), distance(randomNodeDatum, b));
@@ -143,8 +142,9 @@ function herdSimulation() {
                 .attr("r", radius)
                 .each(function(d){
                     state.splits.infected++;
+                    state.splits[d.status]--;
                     pubSubManager.publish("splits", state.splits);
-                })
+                });
 
             // overlay logic
             // get the datum from the last node so that a overlay can be drawn.
@@ -166,10 +166,10 @@ function herdSimulation() {
         } else {
             // bounce off if not infectable
             movingDot.transition().delay(1000).duration(1500)
-            .attr("cx", 0)
-            .attr("cy", 0)
-            .transition()
-            .attr("opacity", 0)
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .transition()
+                .attr("opacity", 0);
         }
     }
 

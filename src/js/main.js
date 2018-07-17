@@ -18,8 +18,11 @@ const donut = donutChart()
     .width(250)
     .height(250)
     .data([{
-        label: "Vaccinated and immune",
+        label: "No group",
         size: 250
+      },{
+        label: "Vaccinated and immune",
+        size: 0
       }, {
         label: "Vaccinated but vulnerable",
         size: 0
@@ -34,7 +37,11 @@ const donut = donutChart()
 const sim = herdSimulation()
     .rZero(10)
     .subscribe("splits", function(splits){
+        // console.log(splits);
         donut.data([{
+            label: "No Group",
+            size: 0
+          },{
             label: "Vaccinated and immune",
             size: splits.vaccinated
           }, {
