@@ -53,12 +53,6 @@ export function delay(duration, callback) {
     });
 }
 
-export function sigma(max, callback) {
-  return Array.from(Array(max).keys())
-    .map(callback).reduce((accumulator, current) => {
-      return accumulator + current;
-    });
-}
 
 /**
  * Generates the splits needed to calculate herd objects

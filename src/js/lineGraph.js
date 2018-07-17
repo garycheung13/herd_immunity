@@ -14,8 +14,8 @@ function lineGraph(){
     let yScale = scaleLinear();
     let xValue = function(d) { return d[0]; };
     let yValue = function(d) { return d[1]; };
-    let xAxis = axisBottom(xScale).tickSize(0).tickPadding(8);
-    let yAxis = axisLeft(yScale).tickSizeOuter(0).tickPadding(8);
+    let xAxis = axisBottom(xScale).tickSize(0).tickPadding(8).tickFormat( function(d){ return d * 100});
+    let yAxis = axisLeft(yScale).tickSizeOuter(0).tickPadding(8).tickFormat( function(d){ return d * 100});;
     let xLabel = "X Value Label";
     let yLabel = "Y Value Label";
     let markerValue = function() { return 0; };
@@ -84,9 +84,9 @@ function lineGraph(){
               .append("text")
                 .attr("class", "label")
                 .attr("x", -height/2 + margin.top + margin.bottom)
-                .attr("y", -margin.left/2)
+                .attr("y", -margin.left/2 - margin.right)
                 .attr("transform", "rotate(-90)")
-                .style("text-anchor", "end")
+                .style("text-anchor", "middle")
                 .text(yLabel);
 
             // finally drawing the line on the graph

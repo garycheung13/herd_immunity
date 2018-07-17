@@ -1,48 +1,31 @@
-import { INTERVAL_SET } from './constants';
-import { sigma } from './utils';
+import { INTERVAL_SET, POPULATION_SIZE, CYCLES } from './constants';
 
-export function generateDataSet(sampleSize, population, cycles, vaccEffect=1) {
-	return INTERVAL_SET.map(function(percentVacc) {
-        // save the max infection size since some vaccination rates will use it
-        const maxPossible = Math.round(population - (population * vaccEffect * percentVacc));
-        let total = 0;
-        let runningPossible = maxPossible;
-        let runningPopulation = population;
+export function generateDataSet(sampleSize, vaccEffect=1) {
+  return INTERVAL_SET.map(function(percentVacc){
+    // const maxPossible = Math.round(POPULATION_SIZE - (POPULATION_SIZE * vaccEffect * percentVacc));
+    const maxPossible = POPULATION_SIZE - (POPULATION_SIZE * vaccEffect * percentVacc);
+    // add one for initial selection
+    const ev = Math.round(sampleSize * (maxPossible/POPULATION_SIZE) + 1);
 
-        // don't bother with looping if there are no targets
-        if (maxPossible === 0) {
-          return {
-            interval: percentVacc,
-            percentInfected: (total >= maxPossible) ? maxPossible/population : total/population
-          };
-        }
+    // running counters
+    let total = 0;
+    let currentPossible = maxPossible;
+    let currentPopulation = POPULATION_SIZE;
+    let expectedInfections = Math.round(CYCLES * (maxPossible/POPULATION_SIZE));
 
-        // calcuate the expected value of the infection spread over multiple infection cycles
-        for (let i=0; i < cycles; i++) {
-          const expectedValue = Math.round(sampleSize * (runningPossible/population));
-          // dont bother with further loopinng if max infection is achieved
-          // this happens when previous loop results in negative remaining population (leading to negative ev)
-          // or total is greater than population
-          if (expectedValue <= 0 || total >= population) {
-            break;
-          }
-          // sum of desired/total * samplesize is the ev of the total spread
-          const summation = sigma(expectedValue + 1, function(d){
-            return (runningPossible - d * expectedValue)/(runningPopulation - d * expectedValue);
-          }) * sampleSize;
+    for (let i=0; i < ev * expectedInfections; i++) {
+      // dont bother looping once population is all infected
+      if (total >= maxPossible) break;
 
-          // update running counts
-          total += summation;
-          runningPossible -= summation;
-          runningPopulation -= summation;
-        }
-        console.log(maxPossible);
-        console.log(total);
-        console.log(population);
+      const outcome = sampleSize * (currentPossible/currentPopulation);
+      total += outcome;
+      currentPossible -= outcome;
+      currentPopulation -= outcome;
+    }
 
-        return {
-          interval: percentVacc,
-          percentInfected: (total >= maxPossible) ? maxPossible/population : total/population
-        };
-        });
-  }
+    return {
+      interval: percentVacc,
+      percentInfected: (total >= maxPossible) ? maxPossible/POPULATION_SIZE : total/POPULATION_SIZE
+    };
+  });
+}

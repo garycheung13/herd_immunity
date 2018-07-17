@@ -12,7 +12,7 @@ const line = lineGraph()
     .x(function(d){ return d.interval; })
     .y(function(d){ return d.percentInfected; })
     .xLabel("Percent Vaccinated")
-    .yLabel("Percent Infected");
+    .yLabel("Expected Percent of Population Infected");
     // .showMarker(true)
 
 const donut = donutChart()
@@ -59,9 +59,8 @@ const sim = herdSimulation()
     });
 
 // initial chart display
-console.log(generateDataSet(10, POPULATION_SIZE, CYCLES, .5));
 
-select("#line-graph").datum(generateDataSet(10, POPULATION_SIZE, CYCLES, .5)).call(line);
+select("#line-graph").datum(generateDataSet(10, .5)).call(line);
 select("#donut-container").call(donut);
 
 // event bindings
@@ -87,7 +86,7 @@ select("#donut-container").call(donut);
         // also convert vac percentage to a float
         const rNumber = +document.getElementById("r-number").value;
         const vaccEffect = +document.getElementById("vac-effect").value * 0.01;
-        select("#line-graph").datum(generateDataSet(rNumber, POPULATION_SIZE, CYCLES, vaccEffect)).call(line);
+        select("#line-graph").datum(generateDataSet(rNumber, vaccEffect)).call(line);
     });
 
     // triggers simulation running
