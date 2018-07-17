@@ -8,11 +8,13 @@ import { generateDataSet } from './probability';
 import { CYCLES, POPULATION_SIZE } from './constants';
 
 // chart module inits
-const line = lineGraph().x(function(d){
-    return d.interval;
-}).y(function(d){
-    return d.percentInfected;
-})
+const line = lineGraph()
+    .x(function(d){ return d.interval; })
+    .y(function(d){ return d.percentInfected; })
+    .xLabel("Percent Vaccinated")
+    .yLabel("Percent Infected");
+    // .showMarker(true)
+
 const donut = donutChart()
     .label(function(d){ return d.size })
     .width(250)
@@ -56,8 +58,10 @@ const sim = herdSimulation()
           }])
     });
 
-// initial chart displaies
-select("#line-graph").datum(generateDataSet(10, POPULATION_SIZE, CYCLES)).call(line);
+// initial chart display
+console.log(generateDataSet(10, POPULATION_SIZE, CYCLES, .5));
+
+select("#line-graph").datum(generateDataSet(10, POPULATION_SIZE, CYCLES, .5)).call(line);
 select("#donut-container").call(donut);
 
 // event bindings

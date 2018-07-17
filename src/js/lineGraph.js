@@ -14,8 +14,10 @@ function lineGraph(){
     let yScale = scaleLinear();
     let xValue = function(d) { return d[0]; };
     let yValue = function(d) { return d[1]; };
-    let xAxis = axisBottom(xScale);
-    let yAxis = axisLeft(yScale);
+    let xAxis = axisBottom(xScale).tickSize(0).tickPadding(8);
+    let yAxis = axisLeft(yScale).tickSizeOuter(0).tickPadding(8);
+    let xLabel = "X Value Label";
+    let yLabel = "Y Value Label";
     let markerValue = function() { return 0; };
     let showMarker = false;
 
@@ -33,8 +35,11 @@ function lineGraph(){
                 .range([0, width - margin.left - margin.right]);
 
             yScale
-                .domain([0, max(data, function(d){return d[1]})])
+                // .domain([0, max(data, function(d){return d[1]})])
+                .domain([0, 1])
                 .range([height - margin.top - margin.bottom, 0]);
+
+            yAxis.tickSizeInner(-width + margin.left + margin.right);
 
             const valueLine = line()
                 .x(function(d) {return xScale(d[0])})
@@ -66,14 +71,27 @@ function lineGraph(){
                 .attr("class", "x-axis axis")
                 .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
                 .call(xAxis)
+              .append("text")
+                .attr("class", "label")
+                .attr("x", width/2)
+                .attr("y", margin.bottom)
+                .style("text-anchor", "end")
+                .text(xLabel);
 
             gEnter.append("g")
                 .attr("class", "y-axis axis")
-                .call(yAxis);
-
-            gEnter.append("path").attr("class", "plot")
+                .call(yAxis)
+              .append("text")
+                .attr("class", "label")
+                .attr("x", -height/2 + margin.top + margin.bottom)
+                .attr("y", -margin.left/2)
+                .attr("transform", "rotate(-90)")
+                .style("text-anchor", "end")
+                .text(yLabel);
 
             // finally drawing the line on the graph
+            gEnter.append("path").attr("class", "plot")
+
             chartArea.select(".plot")
                 .attr("fill", "none")
                 .attr("stroke", "steelblue")
@@ -130,6 +148,18 @@ function lineGraph(){
         yValue = value;
         return chart;
     };
+
+    chart.xLabel = function(value) {
+        if (!arguments.length) return xLabel;
+        xLabel = value;
+        return chart;
+    }
+
+    chart.yLabel = function(value) {
+        if (!arguments.length) return yLabel;
+        yLabel = value;
+        return chart;
+    }
 
     chart.showMarker = function(value) {
         if (!arguments.length) return showMarker;

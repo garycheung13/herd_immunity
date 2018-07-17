@@ -36,6 +36,10 @@ export function generateDataSet(sampleSize, population, cycles, vaccEffect=1) {
           runningPossible -= summation;
           runningPopulation -= summation;
         }
+        console.log(maxPossible);
+        console.log(total);
+        console.log(population);
+
         return {
           interval: percentVacc,
           percentInfected: (total >= maxPossible) ? maxPossible/population : total/population

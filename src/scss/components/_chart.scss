@@ -1,0 +1,9 @@
+.label, .axis text {
+    fill: black;
+    stroke: none;
+    shape-rendering: crispEdges;
+}
+
+.y-axis .tick line {
+    opacity: 0.2;
+}
