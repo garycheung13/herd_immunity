@@ -163,15 +163,45 @@
         </div>
     </section>
     <section>
-        <div class="row">
-            <div id="herd-container" class="col-lg-6">
+        <div>
+            <h3>Color Legend</h3>
+            <svg id="icons" display="block" width="1000" height="30">
+                <circle r="7.5" fill="black" cx="10" cy="10"></circle>
+                <text x="25" y="15" font-family="Open sans" text-anchor="start" font-size="16">Unvaccinated</text>
+
+                <circle r="7.5" fill="steelblue" cx="150" cy="10"></circle>
+                <text x="165" y="15" font-family="Open sans" text-anchor="start" font-size="16">Unprotected(Vaccinated, but Vulnerable)</text>
+
+                <circle r="7.5" fill="green" cx="490" cy="10"></circle>
+                <text x="505" y="15" font-family="Open sans" text-anchor="start" font-size="16">Vaccinated and Immune</text>
+
+                <circle r="7.5" fill="red" cx="715" cy="10"></circle>
+                <text x="730" y="15" font-family="Open sans" text-anchor="start" font-size="16">Infected</text>
+            </svg>
+            <hr>
+        </div>
+        <div class="row" id="sim-area">
+            <div id="herd-container" class="col-lg-6 col-sm-12">
                 <h3>Simulation Display</h3>
                 <p>Press Start Simulation button to start outbreak</p>
             </div>
-            <div id="donut-container" class="col-lg-6">
+            <div id="donut-container" class="col-lg-6 col-sm-12 donut">
                 <h3>Current Simulation Population Distribution</h3>
                 <p>Hover to see segment details</p>
             </div>
+        </div>
+    </section>
+    <section>
+        <h3>References</h3>
+        <div class="citation-wrapper">
+            <p>
+                The Simple Math of Herd Immunity. (2015, April 20).
+                <cite>Retrieved from https://thoughtscapism.com/2015/04/20/the-simple-math-of-herd-immunity/</cite>
+            </p>
+            <p>
+                What is Herd Immunity? (2014, September 5).
+                <cite>Retrieved from http://www.pbs.org/wgbh/nova/body/herd-immunity.html</cite>
+            </p>
         </div>
     </section>
     <script src="dist/main.min.js"></script>

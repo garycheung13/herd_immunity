@@ -7,7 +7,7 @@ import { interpolate } from 'd3-interpolate';
 function donutChart() {
     let height = 500;
     let width = 500;
-    let colors = ["grey", "green", "#F6E481", "black", "red"];
+    let colors = ["grey", "green", "steelblue", "black", "red"];
     let labelValue = function(d) { return d[0]; };
     let quantityValue = function(d) { return d[1]; };
     let donutScale = scaleOrdinal(colors);
@@ -24,7 +24,7 @@ function donutChart() {
 
             donutArc
                 .outerRadius(radius)
-                .innerRadius(radius * 0.6);
+                .innerRadius(radius * 0.7);
 
             donutPie.value(function(d){
                 return labelValue(d);
@@ -48,6 +48,35 @@ function donutChart() {
                 .attr("fill", function(d,i){ return donutScale(i); })
                 .attr("d", donutArc)
                 .each(function(d){this._current = d});
+
+            const tooltip = chartArea.append("g")
+                .attr("display", "none");
+
+            tooltip.append("circle")
+                .attr("r", radius * 0.6)
+                .attr("fill", "lightgrey");
+
+            paths.on("mouseover", function(d, i){
+                tooltip.attr("display", "block");
+                // console.log(d);
+                tooltip.append("text")
+                    .attr("dx", 0)
+                    .attr("dy", -10)
+                    .attr("text-anchor", "middle")
+                    .text(d.data.label);
+
+
+                tooltip.append("text")
+                    .attr("dx", 0)
+                    .attr("dy", 20)
+                    .attr("text-anchor", "middle")
+                    .text(d.data.size);
+            })
+
+            paths.on("mouseout", function(d, i){
+                tooltip.attr("display", "none");
+                tooltip.selectAll("text").remove();
+            })
 
             updateData = function() {
                 const pathUpdate = chartArea.selectAll("path")

@@ -23,10 +23,10 @@ const donut = donutChart()
         label: "No group",
         size: 250
       },{
-        label: "Vaccinated and immune",
+        label: "Immune",
         size: 0
       }, {
-        label: "Vaccinated but vulnerable",
+        label: "Unprotected",
         size: 0
       }, {
         label: "Not vaccinated",
@@ -44,10 +44,10 @@ const sim = herdSimulation()
             label: "No Group",
             size: 0
           },{
-            label: "Vaccinated and immune",
+            label: "Immune",
             size: splits.vaccinated
           }, {
-            label: "Vaccinated but vulnerable",
+            label: "Unprotected",
             size: splits.unprotected
           }, {
             label: "Not vaccinated",
@@ -58,10 +58,10 @@ const sim = herdSimulation()
           }])
     });
 
-// initial chart display
-
+// initially render graphs and charts with some default data
 select("#line-graph").datum(generateDataSet(10, .5)).call(line);
 select("#donut-container").call(donut);
+
 
 // event bindings
 (function(){
@@ -91,6 +91,10 @@ select("#donut-container").call(donut);
 
     // triggers simulation running
     document.getElementById("start-trigger").addEventListener("click", function(){
+        //scroll the user into the sim area on click
+        document.getElementById('sim-area').scrollIntoView({
+            behavior: "smooth"
+        });
         const percentVaccinated = +document.getElementById("percent-vac").value * 0.01;
         const vaccEffect = +document.getElementById("vac-effect").value * 0.01;
         select("#herd-container").call(sim.data(initHerd(POPULATION_SIZE, percentVaccinated, vaccEffect)));
