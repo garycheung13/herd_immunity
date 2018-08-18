@@ -1,0 +1,22 @@
+.label, .axis text {
+    fill: black;
+    stroke: none;
+    shape-rendering: crispEdges;
+}
+
+.label {
+    font-size: 0.75rem;
+}
+
+.y-axis .tick line {
+    opacity: 0.2;
+}
+
+.donut {
+    text-align: center;
+}
+
+.line-chart {
+    box-sizing: border-box;
+    padding-right: 5%;
+}

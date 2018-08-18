@@ -1,0 +1,65 @@
+/*
+base styles imports
+*/
+@import 'typography';
+@import 'grid';
+
+// body contraints
+html {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+section {
+    margin-bottom: 5em;
+    width: 100%;
+}
+
+label {
+    display: block;
+}
+
+a {
+    color: black;
+    position: relative;
+    text-decoration: none;
+    font-style: italic;
+}
+
+// for underline animation
+a::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background-color: black;
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: all 250ms ease-in-out;
+    transform-origin: left;
+}
+
+a:hover::before {
+    visibility: visible;
+    transform: scaleX(1);
+}
+
+button {
+    background-color: white;
+    padding: 10px 25px;
+    border: 2px solid $accent-blue;
+    cursor: pointer;
+
+    @include breakpoint-min(medium) {
+        &:hover {
+            color: white;
+            background-color: $accent-blue;
+        }
+    }
+}
+
+.settings {
+    margin-top: 50px;
+}

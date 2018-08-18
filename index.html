@@ -5,261 +5,213 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="css/styles.css">
-    <link href="https://fonts.googleapis.com/css?family=Muli:600,700|Open+Sans:300,600" rel="stylesheet">
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <title>Herd Immunity Visualization</title>
+    <link href="https://fonts.googleapis.com/css?family=Lora|Nunito:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="dist/main.min.css">
+    <title>Herd Immunity Explorable</title>
 </head>
 
 <body>
-    <div id="container">
-        <h1>Herd Immunity</h1>
-        <div class="block">
-            <h3>What is Herd Immunity?</h3>
-            <p>
-                Herd immunity is refers to the concept the group protection from an infectious disease that emerges when critical mass of
-                the population are immunized from that recieving the disease. In the majority of cases, immunization stems from
-                recieving vaccination against the disease. These immunized people in the community reduce the odds that a disease
-                can spread from person to person. In other words, persons that are not immune to disease can still be shielded
-                against contracting it by virtue of others in the population being unable to pass it on. The greater number of
-                people immune to a disease, the less likely of a chance that someone vulnerable to the disease will contract
-                it. Herd immunity is important because there people who cannot be vaccinated against certain diseases such as
-                those who are too young, too old, or allergic to the vaccination. These people must rely on those around to get
-                vaccinated so that the diease has lower odds of spreading to them.
-            </p>
-            <img class="diagram" src="images/diagram.png" alt="image illustrating spread of a virus">
-            <p class="caption">The diagram above shows the difference between how a disease might spread in a population where no one is protected
-                against the disease versus where the population where some people are vaccinated. Notice that some of the
-                people who are not vaccinated remain uninfected because immune neighbors impeded the spread of the disease.</p>
-        </div>
+    <header>
+        <a href="https://ceegary.com">Return to portfolio</a>
+        <h1>Herd Immunity Explorable</h1>
+    </header>
+    <section>
+        <h2>What is Herd Immunity?</h2>
+        <p>
+            Herd immunity is refers to the concept the group protection from an infectious disease that emerges when critical mass of
+            the population are immunized from that recieving the disease. In the majority of cases, immunization stems from
+            recieving vaccination against the disease. These immunized people in the community reduce the odds that a disease
+            can spread from person to person. In other words, persons that are not immune to disease can still be shielded
+            against contracting it by virtue of others in the population being unable to pass it on. The greater number of
+            people immune to a disease, the less likely of a chance that someone vulnerable to the disease will contract
+            it. Herd immunity is important because there people who cannot be vaccinated against certain diseases such as
+            those who are too young, too old, or allergic to the vaccination. These people must rely on those around to get
+            vaccinated so that the diease has lower odds of spreading to them.
+        </p>
+    </section>
+    <section>
+        <h2>Calculating Herd Immunity</h2>
+        <p>
+            A population is deemed to have achieved herd immunity against an infectious disease outbreak when they have reached or surpassed
+            the herd immunity threshold, denoted as Q<sub>c</sub>. To calculate the value of Q<sub>c</sub>, one would need to know the basic reproductive
+            rate of the specific disease, denoted as R<sub>0</sub>. R<sub>0</sub> is a numeric measure representing the average number of infections
+            made by that specific disease based on it's various attibutes such as method of spread and duration if infection.
+            The higher that number is, the more infectious the disease is said to be. Using the entire equation, we can determine
+            the herd immunity threshold calculated by solving for the equation <span class="equation">Q<sub>c</sub> = 1 – &#40;1/R<sub>0</sub>&#41;</span>.</p>
 
-        <div class="block">
-            <div>
-                <h3>Calculating Herd Immunity</h3>
-                <p>
-                    A population is deemed to have achieved herd immunity against an infectious disease outbreak when they have reached or surpassed
-                    the herd immunity threshold, denoted as Q<sub>c</sub>. To calculate the value of Q<sub>c</sub>, one would need to know the basic reproductive
-                    rate of the specific disease, denoted as R<sub>0</sub>. R<sub>0</sub> is a numeric measure representing the average number of infections
-                    made by that specific disease based on it's various attibutes such as method of spread and duration if infection.
-                    The higher that number is, the more infectious the disease is said to be. Using the entire equation, we can determine
-                    the herd immunity threshold calculated by solving for the equation <span class="equation">Q<sub>c</sub> = 1 – &#40;1/R<sub>0</sub>&#41;</span>.</p>
-
-                <p>
-                    For example, mumps can have a reproductive number &#40;R<sub>0</sub>&#41; of 7, so when we plug it into the equation,
-                    it becomes <span class="equation"> Q<sub>c</sub> = 1 - &#40;1/7&#41;</span>. Solving the equation gives us 0.86. In other words,
-                    86% of the population needs to be immunized.
-                </p>
-                <p>
-                    However, this calculation makes the assumption that a vaccine against the disease will be 100
-                    percent effective. In reality, vaccines are not perfect. Therefore to find the real world vaccination rate
-                    required for herd immunity, we also need to factor in imperfect vaccines by dividing Q<sub>c</sub> by the effectiveness of the vaccine&#40;<i>E</i>&#41;.
-                    Thus, the population required to reach herd immunity threshold can be approximated
-                    as <span class="equation">V<sub>c</sub> = Q<sub>c</sub>/<i>E</i></span>.
-                </p>
-                <p>
-                    In our previous mumps example, the effectiveness of getting two doses of the mumps vaccine is 88 percent.
-                    When that number is converted to a decimal, we can get the equation <span class="equation">0.86/0.88 = 0.97</span>, which converts into 97%.
-                    In reality, 97% of the population is actually needed to reach herd immunity against mumps! When the vaccination coverage of a
-                    population has the necessary percentage for herd immunity, the disease is thought off as "contained".
-                </p>
-            </div>
-            <div>
-                <h3>Reproductive Numbers for some well known diseases</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Disease Name</th>
-                            <th>Reproductive Number &#40;R
-                                <sub>0</sub>&#41;</th>
-                            <th>Vaccine Effectiveness &#40;
-                                <i>E</i>&#41;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Measles</td>
-                            <td>12-18</td>
-                            <td>93% &#40;One Dose&#41;
-                                <br> 97% &#40;Two Doses&#41;</td>
-                        </tr>
-                        <tr>
-                            <td>Mumps</td>
-                            <td>4-7</td>
-                            <td>78% &#40;Two Doses&#41;
-                                <br>88% &#40;Three Doses&#41;</td>
-                        </tr>
-                        <tr>
-                            <td>Polio</td>
-                            <td>5-7</td>
-                            <td>90% &#40;Two Doses&#41;
-                                <br>99% &#40;Three Doses&#41;</td>
-                        </tr>
-                        <tr>
-                            <td>Rubella</td>
-                            <td>5-7</td>
-                            <td>97%</td>
-                        </tr>
-                        <tr>
-                            <td>Seasonal Flu</td>
-                            <td>1-2</td>
-                            <td>Varys, but typically
-                                <br>between 40% - 60%</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p class="citation">
-                    History and epidemiology of global smallpox eradication. (2014, August 25).
-                    <i> Retrieved from https://stacks.cdc.gov/view/cdc/27929</i>
-                </p>
-                <p class="citation">
-                    Vaccine Effectiveness - How Well Does the Flu Vaccine Work? (n.d.).
-                    <i> Retrieved from https://www.cdc.gov/flu/about/qa/vaccineeffect.htm</i>
-                </p>
-                <p class="citation">
-                    Measles, Mumps, and Rubella (MMR) Vaccination: What Everyone Should Know. (n.d.)
-                    <i>Retrieved from https://www.cdc.gov/vaccines/vpd/mmr/public/index.html</i>
-                </p>
-                <p class="citation">
-                    Polio Vaccine Effectiveness and Duration of Protection (n.d.)
-                    <i>https://www.cdc.gov/vaccines/vpd/polio/hcp/effectiveness-duration-protection.html</i>
-                </p>
-            </div>
-        </div>
-        <div class="block">
-            <h1>Your Turn - Simulate your own Outbreak</h1>
-            <p>
-                Watch the effect of vaccination and herd immunity in action by simulating your own outbreak. In the simulation you will be
-                able to modify the reproductive rate of your disease, the effectiveness of the vaccination against it and
-                the vaccination rate of the population. In the simulation, your fictitious disease will have ten attempts
-                infect someone in a population of 250 people. Each time the disease infects a person, it will spread twice
-                according to the reproductive rate you set – once to the R0 number of closest neighbors from the initial
-                infection, and then again for each of the neighbors infected. To incorporate some real life randomness, the
-                location distribution of the vaccinated, unvaccinated and vaccinated but vulnerable is randomly distributed. This will cause some variation the
-                simulation, but you view see the average results on the line graph.
-
-            </p>
-            <div class="flex-container" id="sim-settings">
-                <div class="flex-item">
-
-                    <form id="config" oninput="handleFormChange()">
-                        <div class="form-block">
-                            <h4 class="form-header">Virus Characteristic</h4>
-                            <p class="form-short-label">Set how Aggressively the disease can spread.</p>
-                            <label class="form-label" for="r-number">Reproductive Rate (Number between 1-20) </label>
-                            <br>
-                            <input name="rZero" type="range" value="10" id="r-number" min="1" max="20">
-                            <span id="rZero-view">10</span>
-                        </div>
-
-                        <div class="form-block">
-                            <h4 class="form-header">Vaccine Characteristic</h4>
-                            <p class="form-short-label">Set how effect the vaccine against the disease will be. </p>
-                            <label class="form-label" for="effect">Vaccine Effectiveness</label>
-                            <br>
-                            <input name="vaccineEffect" type="range" value="50" id="effect" min="1" max="100">
-                            <span id="effect-view">50%</span>
-                        </div>
-
-                        <div class="form-block">
-                            <h4 class="form-header">Simulation Population Vaccination Rate</h4>
-                            <p class="form-short-label">How much of the population will be vaccinated in the simulation?</p>
-                            <label class="form-label" for="safe-percent">Percent Vaccinated</label>
-                            <br>
-                            <input name="percentVaccinate" type="range" value="50" id="safe-percent" min="1" max="100">
-                            <span id="safe-percent-view">50%</span>
-                        </div>
-                    </form>
-                    <button id="start-sim" onclick="main()">Start Simulation</button>
-                </div>
-                <div class="flex-item">
-                    <div class="formulas">
-                            <h4>Threshold Percentage</h4>
-                            <span class="thresholdNumber">Qc</span> = 1 - &#40; 1&#x2F;
-                            <span id="rZero_formula">R
-                                <sub>0</sub>
-                            </span>&#41;
-                            <h4>Vaccination Rate needed with Vaccine Effectiveness Factored in</h4>
-                            <span id="threshold-number-percent"></span>
-                            <span id="populationNeeded">Vc</span> =
-                            <span class="thresholdNumber">Qc</span>&#x2F;
-                            <span id="effect-formula">E</span>
-                            <br>
-                            <div id="message"> </div>
-                        </div>
-                    <div id="probability-graph"></div>
-                </div>
-            </div>
-        </div>
-        <div>
-            <svg id="icons" display="block" viewBox="0 0 1000 40" perserveAspectRatio="xMinYmid meet" style="max-width: 1000px;">
-                <circle r="7.5" fill="black" cx="10" cy="10"></circle>
-                <text x="25" y="15" font-family="Open sans" text-anchor="start" font-size="16">Unvaccinated</text>
-
-                <circle r="7.5" fill="#F6E481" cx="150" cy="10"></circle>
-                <text x="165" y="15" font-family="Open sans" text-anchor="start" font-size="16">Vaccinated, but Vulnerable</text>
-
-                <circle r="7.5" fill="green" cx="380" cy="10"></circle>
-                <text x="395" y="15" font-family="Open sans" text-anchor="start" font-size="16">Vaccinated and Immune</text>
-
-                <circle r="7.5" fill="red" cx="600" cy="10"></circle>
-                <text x="615" y="15" font-family="Open sans" text-anchor="start" font-size="16">Infected</text>
-            </svg>
-            <hr>
-        </div>
-        <div class="block flex-container" id="sim-area">
-            <div class="flex-item">
-                <svg id="graph" viewBox="0 0 500 500" perserveAspectRatio="xMinYmid meet" style="max-width: 500px;">
-                    <text x="250" y="50" font-family="Open Sans" text-anchor="middle" font-size="20">
-                        Press Simulate to Begin Outbreak
-                    </text>
-                    <image href="images/placeholder.png" x=50 y="75"></image>
-                </svg>
-            </div>
-            <div class="flex-item">
-                <h3>Current Simulation Population Distribution</h3>
-                <p>Hover to learn more about a segment</p>
-                <svg id="donut" viewBox="0 0 500 250" perserveAspectRatio="xMinYmid meet" style="max-width: 500px;"></svg>
-                <div>
-                    <p id="sim-comment" class="hidden">
-                        Javascript is broken :&#40;
-                    </p>
-                </div>
-                <div class="page-jump">
-                    <a href="#sim-settings">Back to Settings</a>
-                </div>
-            </div>
-        </div>
-        <div id="final-stats">
-            <h1>Simulation Log</h1>
+        <p>
+            For example, mumps can have a reproductive number &#40;R<sub>0</sub>&#41; of 7, so when we plug it into the equation,
+            it becomes <span class="equation"> Q<sub>c</sub> = 1 - &#40;1/7&#41;</span>. Solving the equation gives us 0.86. In other words,
+            86% of the population needs to be immunized.
+        </p>
+        <p>
+            However, this calculation makes the assumption that a vaccine against the disease will be 100
+            percent effective. In reality, vaccines are not perfect. Therefore to find the real world vaccination rate
+            required for herd immunity, we also need to factor in imperfect vaccines by dividing Q<sub>c</sub> by the effectiveness of the vaccine&#40;<i>E</i>&#41;.
+            Thus, the population required to reach herd immunity threshold can be approximated
+            as <span class="equation">V<sub>c</sub> = Q<sub>c</sub>/<i>E</i></span>.
+        </p>
+        <p>
+            In our previous mumps example, the effectiveness of getting two doses of the mumps vaccine is 88 percent.
+            When that number is converted to a decimal, we can get the equation <span class="equation">0.86/0.88 = 0.97</span>, which converts into 97%.
+            In reality, 97% of the population is actually needed to reach herd immunity against mumps! When the vaccination coverage of a
+            population has the necessary percentage for herd immunity, the disease is thought off as "contained".
+        </p>
+        <div class="table-wrapper">
+            <h3>Reproductive Numbers For Well Known Diseases</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>Sim No. </th>
-                        <th>Reproductive Number</th>
-                        <th>Percent Vaccinated</th>
-                        <th>Percent of Possible</th>
-                        <th>Percent of Total</th>
+                        <th>Disease Name</th>
+                        <th>Reproductive Number &#40;R<sub>0</sub>&#41;</th>
+                        <th>Vaccine Effectiveness &#40;<i>E</i>&#41;</th>
                     </tr>
                 </thead>
-                <tbody id="final-stats-body">
-
+                <tbody>
+                    <tr>
+                        <td>Measles</td>
+                        <td>12-18</td>
+                        <td>93% &#40;One Dose&#41;, 97% &#40;Two Doses&#41;</td>
+                    </tr>
+                    <tr>
+                        <td>Mumps</td>
+                        <td>4-7</td>
+                        <td>78% &#40;Two Doses&#41;, 88% &#40;Three Doses&#41;</td>
+                    </tr>
+                    <tr>
+                        <td>Polio</td>
+                        <td>5-7</td>
+                        <td>90% &#40;Two Doses&#41;, 99% &#40;Three Doses&#41;</td>
+                    </tr>
+                    <tr>
+                        <td>Rubella</td>
+                        <td>5-7</td>
+                        <td>97%</td>
+                    </tr>
+                    <tr>
+                        <td>Seasonal Flu</td>
+                        <td>1-2</td>
+                        <td>Varys, but typically between 40% - 60%</td>
+                    </tr>
                 </tbody>
             </table>
+            <div class="citation-wrapper">
+                <p>
+                    History and epidemiology of global smallpox eradication. (2014, August 25).
+                    <cite>Retrieved from https://stacks.cdc.gov/view/cdc/27929</cite>
+                </p>
+                <p>
+                    Vaccine Effectiveness - How Well Does the Flu Vaccine Work? (n.d.).
+                    <cite>Retrieved from https://www.cdc.gov/flu/about/qa/vaccineeffect.htm</cite>
+                </p>
+                <p>
+                    Measles, Mumps, and Rubella (MMR) Vaccination: What Everyone Should Know. (n.d.)
+                    <cite>Retrieved from https://www.cdc.gov/vaccines/vpd/mmr/public/index.html</cite>
+                </p>
+                <p>
+                    Polio Vaccine Effectiveness and Duration of Protection (n.d.)
+                    <cite>https://www.cdc.gov/vaccines/vpd/polio/hcp/effectiveness-duration-protection.html</cite>
+                </p>
+            </div>
         </div>
-        <div class="block" style="padding-top: 50px">
-            <h1>References</h1>
-            <p class="citation">The Simple Math of Herd Immunity. (2015, April 20).
-                <i>Retrieved from https://thoughtscapism.com/2015/04/20/the-simple-math-of-herd-immunity/</i>
+    </section>
+    <section>
+        <h2>Your Turn</h2>
+        <p>
+            Watch the effect of vaccination and herd immunity in action by simulating your own outbreak. In the simulation you will be
+            able to modify the reproductive rate of your disease, the effectiveness of the vaccination against it and
+            the vaccination rate of the population. In the simulation, your fictitious disease will have ten attempts
+            infect someone in a population of 250 people. Each time the disease infects a person, it will spread twice
+            according to the reproductive rate you set – once to the R<sub>0</sub> number of closest neighbors from the initial
+            infection, and then again for each of the neighbors infected. To incorporate some real life randomness, the
+            location distribution of the vaccinated, unvaccinated and vaccinated but vulnerable is randomly distributed. This will cause some variation the
+            simulation, but you view see the average results on the line graph.
+        </p>
+        <div class="row settings" id="settings">
+            <!-- feedback graph -->
+            <div id="line-graph" class="col-lg-9 line-chart"></div>
+
+            <div class="col-lg-3">
+                <form id="sim-settings" action="/">
+                    <label class="form-label" for="r-number">
+                        Reproductive Rate &#40;R<sub>0</sub>&#41;<br>
+                        <span class="subtitle">Set how aggressively the disease will spread.</span>
+                    </label>
+                    <input type="range" name="r-number" value="10" id="r-number" min="1" max="20">
+                    <span class="form-display" id="r-number__display">10</span>
+
+                    <label for="vac-effect" class="form-label">
+                        Vaccine Effectiveness <br>
+                        <span class="subtitle">Set the effectiveness of the vaccine</span>
+                    </label>
+                    <input name="vac-effect" type="range" value="50" id="vac-effect" min="1" max="100">
+                    <span class="form-display" id="vac-effect__display">50</span>
+
+                    <label for="percent-vac" class="form-label">
+                        Percent Vaccinated <br>
+                        <span class="subtitle">How many people will be vaccinated?</span>
+                    </label>
+                    <input name="percent-vac" type="range" value="50" id="percent-vac" min="1" max="100">
+                    <span class="form-display" id="percent-vac__display">50</span>
+                </form>
+                <!-- interactive formulas -->
+                <div class="equation interactive-formula">
+                    <h5>Threshold Percentage</h5>
+                    <span id="formula__Qc">Q<sub>c</sub></span> = 1 – &#40;1/<span id="formula__R0">R<sub>0</sub></span>&#41;
+                </div>
+                <div class="equation interactive-formula">
+                    <h5>Vaccination Rate needed with Vaccine Effectiveness Factored in</h5>
+                    <span id="formula__Vc">V<sub>c</sub></span> = <span id="formula__QcD">Q<sub>c</sub></span> / <span id="formula__E"><i>E</i></span>
+                </div>
+
+                <button id="start-trigger">Start Simulation</button>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div>
+            <h3>Color Legend</h3>
+            <svg id="icons" display="block" width="1000" height="30">
+                <circle r="7.5" fill="black" cx="10" cy="10"></circle>
+                <text x="25" y="15" font-family="Open sans" text-anchor="start" font-size="16">Unvaccinated</text>
+
+                <circle r="7.5" fill="steelblue" cx="150" cy="10"></circle>
+                <text x="165" y="15" font-family="Open sans" text-anchor="start" font-size="16">Unprotected(Vaccinated, but Vulnerable)</text>
+
+                <circle r="7.5" fill="green" cx="490" cy="10"></circle>
+                <text x="505" y="15" font-family="Open sans" text-anchor="start" font-size="16">Vaccinated and Immune</text>
+
+                <circle r="7.5" fill="red" cx="715" cy="10"></circle>
+                <text x="730" y="15" font-family="Open sans" text-anchor="start" font-size="16">Infected</text>
+            </svg>
+            <hr>
+        </div>
+        <div class="row" id="sim-area">
+            <div id="herd-container" class="col-lg-6 col-sm-12">
+                <h3>Simulation Display</h3>
+                <p>Press "Start Simulation" button to start outbreak</p>
+            </div>
+            <div id="donut-container" class="col-lg-6 col-sm-12 donut">
+                <h3>Current Simulation Population Distribution</h3>
+                <p>Hover to see segment details</p>
+            </div>
+        </div>
+        <button id="setting-jump">Go to Settings</button>
+    </section>
+    <section>
+        <h3>References</h3>
+        <div class="citation-wrapper">
+            <p>
+                The Simple Math of Herd Immunity. (2015, April 20).
+                <cite>Retrieved from https://thoughtscapism.com/2015/04/20/the-simple-math-of-herd-immunity/</cite>
             </p>
-            <p class="citation">
+            <p>
                 What is Herd Immunity? (2014, September 5).
-                <i> Retrieved from http://www.pbs.org/wgbh/nova/body/herd-immunity.html</i>
+                <cite>Retrieved from http://www.pbs.org/wgbh/nova/body/herd-immunity.html</cite>
             </p>
         </div>
-    </div>
-    <script src="js/main.js"></script>
-    <script src="js/probability.js"></script>
-    <script src="js/donut.js"></script>
-    <script src="js/lineChart.js"></script>
+    </section>
+    <script src="dist/main.min.js"></script>
 </body>
+
 </html>
