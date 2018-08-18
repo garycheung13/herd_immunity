@@ -127,9 +127,9 @@
             location distribution of the vaccinated, unvaccinated and vaccinated but vulnerable is randomly distributed. This will cause some variation the
             simulation, but you view see the average results on the line graph.
         </p>
-        <div class="row">
+        <div class="row settings" id="settings">
             <!-- feedback graph -->
-            <div id="line-graph" class="col-lg-9"></div>
+            <div id="line-graph" class="col-lg-9 line-chart"></div>
 
             <div class="col-lg-3">
                 <form id="sim-settings" action="/">
@@ -155,10 +155,16 @@
                     <span class="form-display" id="percent-vac__display">50</span>
                 </form>
                 <!-- interactive formulas -->
-                <div class="equation interactive-formula">Q<sub>c</sub> = 1 – &#40;1/R<sub>0</sub>&#41;</div>
-                <div class="equation interactive-formula">V<sub>c</sub> = Q<sub>c</sub>/<i>E</i></div>
+                <div class="equation interactive-formula">
+                    <h5>Threshold Percentage</h5>
+                    <span id="formula__Qc">Q<sub>c</sub></span> = 1 – &#40;1/<span id="formula__R0">R<sub>0</sub></span>&#41;
+                </div>
+                <div class="equation interactive-formula">
+                    <h5>Vaccination Rate needed with Vaccine Effectiveness Factored in</h5>
+                    <span id="formula__Vc">V<sub>c</sub></span> = <span id="formula__QcD">Q<sub>c</sub></span> / <span id="formula__E"><i>E</i></span>
+                </div>
 
-                <button id="start-trigger">Start Sim</button>
+                <button id="start-trigger">Start Simulation</button>
             </div>
         </div>
     </section>
@@ -183,13 +189,14 @@
         <div class="row" id="sim-area">
             <div id="herd-container" class="col-lg-6 col-sm-12">
                 <h3>Simulation Display</h3>
-                <p>Press Start Simulation button to start outbreak</p>
+                <p>Press "Start Simulation" button to start outbreak</p>
             </div>
             <div id="donut-container" class="col-lg-6 col-sm-12 donut">
                 <h3>Current Simulation Population Distribution</h3>
                 <p>Hover to see segment details</p>
             </div>
         </div>
+        <button id="setting-jump">Go to Settings</button>
     </section>
     <section>
         <h3>References</h3>

@@ -64,6 +64,13 @@ td {
   font-size: 0.75rem;
 }
 
+button {
+  font-family: "Nunito", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-family: 0.8rem;
+}
+
 .form-label {
   font-family: "Nunito", sans-serif;
   font-weight: 600;
@@ -75,4 +82,12 @@ td {
   font-weight: 400;
   font-style: italic;
   font-size: 0.8rem;
+}
+
+.interactive-formula {
+  font-family: "Nunito", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1rem;
+  margin-bottom: 25px;
 }

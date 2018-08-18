@@ -3,17 +3,17 @@ import { select } from 'd3-selection';
 import lineGraph from './lineGraph';
 import donutChart from './donutChart';
 import herdSimulation from './herdSimulation';
-import { initHerd } from './utils';
+import { initHerd, herdImmunity } from './utils';
 import { generateDataSet } from './probability';
 import { CYCLES, POPULATION_SIZE } from './constants';
 
 // chart module inits
 const line = lineGraph()
+    .showMarker(true)
     .x(function(d){ return d.interval; })
     .y(function(d){ return d.percentInfected; })
     .xLabel("Percent Vaccinated")
     .yLabel("Expected Percent of Population Infected");
-    // .showMarker(true)
 
 const donut = donutChart()
     .label(function(d){ return d.size })
@@ -78,14 +78,32 @@ select("#donut-container").call(donut);
             displayElements[e.target.id].innerText = e.target.value;
         });
     });
+    // selectors for changing setting display numbers
+    const form = document.getElementById("sim-settings");
+    const formulaQc = document.getElementById("formula__Qc");
+    const formulaR0 = document.getElementById("formula__R0");
+    const formulaVC = document.getElementById("formula__Vc");
+    const formulaE = document.getElementById("formula__E");
+    const formulaQCD = document.getElementById("formula__QcD");
 
     // line graph change trigger
-    const form = document.getElementById("sim-settings");
     form.addEventListener("input", function(){
         // grab the slider values and cast to ints
         // also convert vac percentage to a float
         const rNumber = +document.getElementById("r-number").value;
         const vaccEffect = +document.getElementById("vac-effect").value * 0.01;
+
+        // formula updates
+        const herdThreshold = herdImmunity(rNumber).toFixed(2);
+
+        formulaQc.innerText = herdThreshold;
+        formulaR0.innerText = rNumber;
+        formulaE.innerText = vaccEffect.toFixed(2);
+        formulaQCD.innerText = herdThreshold;
+        formulaVC.innerText = herdImmunity(rNumber, vaccEffect).toFixed(2);
+
+        // set the marker for herd immunity threshold
+        line.markerValue(herdImmunity(rNumber, vaccEffect).toFixed(2));
         select("#line-graph").datum(generateDataSet(rNumber, vaccEffect)).call(line);
     });
 
@@ -99,4 +117,10 @@ select("#donut-container").call(donut);
         const vaccEffect = +document.getElementById("vac-effect").value * 0.01;
         select("#herd-container").call(sim.data(initHerd(POPULATION_SIZE, percentVaccinated, vaccEffect)));
     });
+
+    document.getElementById("setting-jump").addEventListener("click", function(){
+        document.getElementById("settings").scrollIntoView({
+            behavior: "smooth"
+        })
+    })
 })();

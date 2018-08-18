@@ -20,6 +20,7 @@ function lineGraph(){
     let yLabel = "Y Value Label";
     let markerValue = function() { return 0; };
     let showMarker = false;
+    let markerText = "Insert Text";
 
     function chart(selection){
         selection.each(function(data){
@@ -103,17 +104,32 @@ function lineGraph(){
 
             // handle drawing a vertical line marker on the graph if needed
             if (showMarker) {
-                const value = (typeof markerValue === "function") ? markerValue.call(null, data) : markerValue;
-                gEnter.append("line").attr("class", "threshold-marker")
+                const valueLine = (typeof markerValue === "function") ? markerValue.call(null, data) : markerValue;
+                gEnter.append("line").attr("class", "threshold-marker");
                 chartArea.select(".threshold-marker")
                     .attr("stroke-dasharray", "5, 5")
                     .style("stroke-width", 1)
                     .style("stroke", "grey")
+                    .attr("display", function(){
+                        // TODO: temp workaround, make this programmatic
+                        return markerValue < 1 ? "block" : "none";
+                    })
                     .transition()
-                    .attr("x1", xScale(value))
-                    .attr("x2", xScale(value))
+                    .attr("x1", xScale(valueLine))
+                    .attr("x2", xScale(valueLine))
                     .attr("y1", 0)
                     .attr("y2", height - margin.top - margin.bottom);
+
+                gEnter.append("text").attr("class", "threshold-text");
+                chartArea.select(".threshold-text")
+                    .attr("x", xScale(valueLine) - 10) // offset from line edge
+                    .attr("y", height/2)
+                    .attr("text-anchor", "end")
+                    .text("Percent Needed")
+                    .attr("display", function(){
+                        // TODO: temp workaround, make this programmatic
+                        return markerValue < 1 ? "block" : "none";
+                    });
             }
         })
     }

@@ -5,7 +5,7 @@
 }
 
 .label {
-    font-size: 0.6rem;
+    font-size: 0.75rem;
 }
 
 .y-axis .tick line {
@@ -14,4 +14,9 @@
 
 .donut {
     text-align: center;
+}
+
+.line-chart {
+    box-sizing: border-box;
+    padding-right: 5%;
 }
