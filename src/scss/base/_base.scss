@@ -47,15 +47,17 @@ a:hover::before {
 }
 
 button {
-    background-color: white;
-    padding: 10px 25px;
-    border: 2px solid $accent-blue;
+    background-color: $accent-blue-tinted;
+    padding: 12.5px 25px;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
+    color: white;
+    box-shadow: 0px 2px 4px 0px #ABABAB;
 
     @include breakpoint-min(medium) {
         &:hover {
-            color: white;
-            background-color: $accent-blue;
+            background-color: $accent-blue-dark;
         }
     }
 }
